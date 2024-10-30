@@ -7,9 +7,9 @@ function Retro_Repeat_WithinBlock(subject,practice,startblock)
 % previously run task
 
 sca;
-% [playbackdevID,capturedevID] = getDevices;
-playbackdevID=3;
-capturedevID=1;
+[playbackdevID,capturedevID] = getDevices;
+% playbackdevID=3;
+% capturedevID=1;
 
 %playbackdevID = 7; %3; % 4 for usb amp, 3 without
 %capturedevID = 6; %1; % 2 for usb amp, 1 without
@@ -21,8 +21,9 @@ subjectDir = fullfile('data', [num2str(subject), '_' num2str(c(1)) num2str(c(2))
 %        load the sounds
 %============================================
 
-%stim_Tags = {'she','do','ma'};
-stim_Tags = {'click1','click2','click3'};
+%stim_Tags = {'ree','mo','ga'}; % Subject3
+%stim_Tags = {'click1','click2','click3'}; % Subject1
+stim_Tags = {'click1','click1','click1'};  % Subject2
 
 retro_Tags = {"REP_BTH","REV_BTH","REP_1ST","REP_2ND","DRP_BTH"};
 
