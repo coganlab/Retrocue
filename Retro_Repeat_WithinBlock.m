@@ -30,7 +30,7 @@ retro_Tags = {"REP_BTH","REV_BTH","REP_1ST","REP_2ND","DRP_BTH"};
 [sound_i, ~] = audioread(fullfile('stim',[stim_Tags{1},'.wav']));
 [sound_u, ~] = audioread(fullfile('stim',[stim_Tags{2},'.wav']));
 [sound_a, fs] = audioread(fullfile('stim',[stim_Tags{3},'.wav']));
-[tone500, ~]=audioread(fullfile('stim','tone.wav'));
+[tone500, ~]=audioread(fullfile('..','tone500_3.wav'));
 
 len_i = length(sound_i);
 len_u = length(sound_u);
