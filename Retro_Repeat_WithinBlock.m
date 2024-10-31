@@ -127,7 +127,7 @@ circleColor2 = [0 0 0]; % black
 % Ready Loop
 while ~KbCheck
     % Flip to the screen
-    DrawFormattedText(window, 'If you see the cue Yes/No, please say Yes for a word and No for a nonword. \nIf you see the cue Repeat, please repeat the word/nonword. \nPress any key to start. ', 'center', 'center', [1 1 1],58);
+    DrawFormattedText(window, 'Listen to two sounds carefully and keep them in mind. \nIf you see the cue [1 2], please repeat in order. \nIf you see the cue [2 1], please repeat in reversed order. \nIf you see the cue [1], please repeat the first one \nIf you see the cue [2], please repeat the second one \nIf you see the cue [0], forget the sounds \nPress any key to start. ', 'center', 'center', [1 1 1],58);
 
     Screen('Flip', window);
     WaitSecs(0.001);
@@ -233,7 +233,7 @@ for iB=iBStart:nBlocks %nBlocks;
     PsychPortAudio('FillBuffer', soundBuffer{1,3}, [sound_a,sound_a]');
     
     soundBuffer{1,4}=PsychPortAudio('OpenSlave', pahandle,1,2);
-    PsychPortAudio('FillBuffer', soundBuffer{1,4}, [tone500,tone500]');
+    PsychPortAudio('FillBuffer', soundBuffer{1,4}, [tone500*0.1,tone500*0.1]');
 
     % Start pahandle
     PsychPortAudio('Start', pahandle,0,0);
@@ -272,11 +272,11 @@ for iB=iBStart:nBlocks %nBlocks;
 
         
         % ! Currently I don't have the pase_script
-        % if pause_script(window)
-        %     PsychPortAudio('close');
-        %     sca;
-        %     return;
-        % end
+        if pause_script(window)
+            PsychPortAudio('close');
+            sca;
+             return;
+         end
 
         switch retro_trials(iTrials)
             case 1 % REP_BTH
