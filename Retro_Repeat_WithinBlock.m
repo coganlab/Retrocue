@@ -77,6 +77,12 @@ elseif ~exist(subjectDir,'dir')
     mkdir(subjectDir)
 end
 
+filename_full = fullfile(subjectDir, [num2str(subject) fileSuff]);
+
+% initialize BIDS_output
+BIDS_out = {'cue', 'cue_brightness', 'sound1', 'sound2', 'block', 'Trigger', 'audio1Start', 'audio1AlignedTrigger', 'audio2Start', 'audio2AlignedTrigger', 'del1Start', 'del1End', 'cueEnd', 'del2End', 'goEnd', 'respEnd', 'isiEnd', 'flipTimes'};
+writecell(BIDS_out,[filename_full '.csv'],'FileType','text','Delimiter',',')
+
 % Initialize Sounddriver
 InitializePsychSound(1);
 
@@ -323,10 +329,7 @@ for iB=iBStart:nBlocks %nBlocks;
         trialInfo{trialCount+1}.sound1 = soundBlockPlay{iTrials}.name1;%trialStruct.sound{trialShuffle(2,iTrials)};
         trialInfo{trialCount+1}.sound2 = soundBlockPlay{iTrials}.name2;%trialStruct.sound{trialShuffle(2,iTrials)};
         trialInfo{trialCount+1}.go = go;
-        trialInfo{trialCount+1}.cueTime=GetSecs;   % !!!!!!!!!!!!!Change it!!!!!!!!!!!!!!!!!
         trialInfo{trialCount+1}.block = iB;
-        %trialInfo{trialCount+1}.cond = trialShuffle(4,iTrials);
-        trialInfo{trialCount+1}.cueStart = GetSecs;  % !!!!!!!!!!!!!Change it!!!!!!!!!!!!!!!!!
         trialInfo{trialCount+1}.Trigger=soundBlockPlay{iTrials}.Trigger;
 
         %============================================
@@ -500,6 +503,11 @@ for iB=iBStart:nBlocks %nBlocks;
 
         trialInfo{trialCount+1}.isiEnd=GetSecs;
         trialInfo{trialCount+1}.flipTimes = flipTimes;
+
+        % write the BIDS format of the current trial
+        trialInfo_trialBIDS = cellfun(@(f) trialInfo{trialCount+1}.(f), BIDS_out, 'UniformOutput', false);
+        writecell(trialInfo_trialBIDS,[filename_full '.csv'],'FileType','text','Delimiter',',','WriteMode','append')
+
         save([subjectDir '/' num2str(subject) '_Block_' num2str(iBStart) fileSuff '_TrialData.mat'],'trialInfo')
 
         trialCount=trialCount+1;
