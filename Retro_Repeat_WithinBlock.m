@@ -92,6 +92,10 @@ InitializePsychSound(1);
 
 [~,block_No,Syll1_No,Syll2_No,Retro_No,Retro_Brightness]=read_trials(subject,stim_Tags,retro_Tags);
 
+imgDir = fullfile("stim","circle_green.png");
+[speak_pic,~,speak_pic_alpha] = imread(imgDir);
+speak_pic(:, :, 4) = speak_pic_alpha;
+
 %============================================
 %                screen setup
 %============================================
@@ -461,9 +465,13 @@ for iB=iBStart:nBlocks %nBlocks;
         %============================================
         %               Go
         %============================================
+
+        texture = Screen('MakeTexture',win,speak_pic);
+        texture_func = @() Screen('DrawTexture', window, texture, []);
         if retro_trials(iTrials)~=5 % Repeat both
             for i=1:goTimeFrames
-                DrawFormattedText(window, go, 'center', 'center', [1 1 1]);
+                texture_func();
+                %DrawFormattedText(window, go, 'center', 'center', [1 1 1]);
                 Screen('Flip', window);
             end
             
