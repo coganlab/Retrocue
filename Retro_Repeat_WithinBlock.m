@@ -21,16 +21,16 @@ subjectDir = fullfile('data', [num2str(subject), '_' num2str(c(1)) num2str(c(2))
 %        load the sounds
 %============================================
 
-%stim_Tags = {'ree','mo','ga'}; % Subject3
+stim_Tags = {'ree','mo','ga'}; % Subject3
 %stim_Tags = {'click1','click2','click3'}; % Subject1
-stim_Tags = {'click1','click1','click1'};  % Subject2
+%stim_Tags = {'click1','click1','click1'};  % Subject2
 
 retro_Tags = {"REP_BTH","REV_BTH","REP_1ST","REP_2ND","DRP_BTH"};
 
 [sound_i, ~] = audioread(fullfile('stim',[stim_Tags{1},'.wav']));
 [sound_u, ~] = audioread(fullfile('stim',[stim_Tags{2},'.wav']));
 [sound_a, fs] = audioread(fullfile('stim',[stim_Tags{3},'.wav']));
-[tone500, ~]=audioread(fullfile('..','tone500_3.wav'));
+[tone500, ~]=audioread(fullfile('stim','tone500_3.wav'));
 
 len_i = length(sound_i);
 len_u = length(sound_u);
@@ -134,6 +134,13 @@ circleColor1 = [1 1 1]; % white
 circleColor2 = [0 0 0]; % black
 % Query the frame duration
 
+% Green circle for Go cue
+[imageHeight, imageWidth, ~] = size(speak_pic);
+scaleFactor = 0.5;
+dstRect = CenterRectOnPointd([0, 0, imageWidth * scaleFactor, imageHeight * scaleFactor], screenXpixels / 2, screenYpixels / 2);
+texture = Screen('MakeTexture',window,speak_pic);
+texture_func = @() Screen('DrawTexture', window, texture, [], dstRect);
+
 % Ready Loop
 while ~KbCheck
     % Flip to the screen
@@ -174,7 +181,7 @@ for iB=iBStart:nBlocks %nBlocks;
 
     cueTimeJitterSeconds = 0.2; % 0.25; % Cue Jitter s
     delTimeJitterSeconds = 0.2;% 0.5; % Del Jitter s
-    goTimeJitterSeconds = 0.2;% 0.25; % Go Jitter s
+    goTimeJitterSeconds = 0.1;% 0.25; % Go Jitter s
     isiTimeJitterSeconds = 0.2; % 0.5; % ISI Jitter s
 
     soundBlockPlay=[];
@@ -466,8 +473,6 @@ for iB=iBStart:nBlocks %nBlocks;
         %               Go
         %============================================
 
-        texture = Screen('MakeTexture',win,speak_pic);
-        texture_func = @() Screen('DrawTexture', window, texture, []);
         if retro_trials(iTrials)~=5 % Repeat both
             for i=1:goTimeFrames
                 texture_func();
