@@ -24,22 +24,24 @@ subjectDir = fullfile('data', [num2str(subject), '_' num2str(c(1)) num2str(c(2))
 stim_Tags = {'ree','mo','ga'}; % Subject3
 %stim_Tags = {'click1','click2','click3'}; % Subject1
 %stim_Tags = {'click1','click1','click1'};  % Subject2
+%stim_Suffix = '_gTTS_rms';
+stim_Suffix = '_human_rms';
 
 retro_Tags = {"REP_BTH","REV_BTH","REP_1ST","REP_2ND","DRP_BTH"};
 
-[sound_i, ~] = audioread(fullfile('stim',[stim_Tags{1},'.wav']));
-[sound_u, ~] = audioread(fullfile('stim',[stim_Tags{2},'.wav']));
-[sound_a, fs] = audioread(fullfile('stim',[stim_Tags{3},'.wav']));
+[sound_i, ~] = audioread(fullfile('stim',[stim_Tags{1},stim_Suffix,'.wav']));
+[sound_o, ~] = audioread(fullfile('stim',[stim_Tags{2},stim_Suffix,'.wav']));
+[sound_a, fs] = audioread(fullfile('stim',[stim_Tags{3},stim_Suffix,'.wav']));
 [tone500, ~]=audioread(fullfile('stim','tone500_3.wav'));
 
 len_i = length(sound_i);
-len_u = length(sound_u);
+len_o = length(sound_o);
 len_a = length(sound_a);
 
-max_len = max([len_i, len_u, len_a]);
+max_len = max([len_i, len_o, len_a]);
 
 sound_i = padarray(sound_i, [(max_len - len_i)/2, 0], 0, 'both');
-sound_u = padarray(sound_u, [(max_len - len_u)/2, 0], 0, 'both');
+sound_o = padarray(sound_o, [(max_len - len_o)/2, 0], 0, 'both');
 sound_a = padarray(sound_a, [(max_len - len_a)/2, 0], 0, 'both');
 
 %============================================
@@ -80,7 +82,7 @@ end
 filename_full = fullfile(subjectDir, [num2str(subject) fileSuff]);
 
 % initialize BIDS_output
-BIDS_out = {'cue', 'cue_brightness', 'sound1', 'sound2', 'block', 'Trigger', 'audio1Start', 'audio1AlignedTrigger', 'audio2Start', 'audio2AlignedTrigger', 'del1Start', 'del1End', 'cueEnd', 'del2End', 'goEnd', 'respEnd', 'isiEnd', 'flipTimes'};
+BIDS_out = {'onset','duration','trial_type','trial_num','block_num','cue_brightness'};
 writecell(BIDS_out,[filename_full '.csv'],'FileType','text','Delimiter',',')
 
 % Initialize Sounddriver
@@ -136,7 +138,7 @@ circleColor2 = [0 0 0]; % black
 
 % Green circle for Go cue
 [imageHeight, imageWidth, ~] = size(speak_pic);
-scaleFactor = 0.5;
+scaleFactor = 0.2;
 dstRect = CenterRectOnPointd([0, 0, imageWidth * scaleFactor, imageHeight * scaleFactor], screenXpixels / 2, screenYpixels / 2);
 texture = Screen('MakeTexture',window,speak_pic);
 texture_func = @() Screen('DrawTexture', window, texture, [], dstRect);
@@ -206,7 +208,7 @@ for iB=iBStart:nBlocks %nBlocks;
             case 1 % she
                 soundBlockPlay{i}.sound1=sound_i;
             case 2 % do
-                soundBlockPlay{i}.sound1=sound_u;
+                soundBlockPlay{i}.sound1=sound_o;
             case 3 % ma
                 soundBlockPlay{i}.sound1=sound_a;
         end
@@ -215,7 +217,7 @@ for iB=iBStart:nBlocks %nBlocks;
             case 1 % she
                 soundBlockPlay{i}.sound2=sound_i;
             case 2 % do
-                soundBlockPlay{i}.sound2=sound_u;
+                soundBlockPlay{i}.sound2=sound_o;
             case 3 % ma
                 soundBlockPlay{i}.sound2=sound_a;
         end
@@ -244,7 +246,7 @@ for iB=iBStart:nBlocks %nBlocks;
     PsychPortAudio('FillBuffer', soundBuffer{1,1}, [sound_i,sound_i]');
     
     soundBuffer{1,2}=PsychPortAudio('OpenSlave', pahandle,1,2);
-    PsychPortAudio('FillBuffer', soundBuffer{1,2},  [sound_u,sound_u]');
+    PsychPortAudio('FillBuffer', soundBuffer{1,2},  [sound_o,sound_o]');
     
     soundBuffer{1,3}=PsychPortAudio('OpenSlave', pahandle,1,2);
     PsychPortAudio('FillBuffer', soundBuffer{1,3}, [sound_a,sound_a]');
@@ -308,7 +310,6 @@ for iB=iBStart:nBlocks %nBlocks;
                 cue='0';
         end
 
-        % WE DONT NEED THIS
         sound1=soundBlockPlay{iTrials}.sound1;
         sound1=sound1(:,1);
         sound2=soundBlockPlay{iTrials}.sound2;
@@ -517,9 +518,26 @@ for iB=iBStart:nBlocks %nBlocks;
         trialInfo{trialCount+1}.isiEnd=GetSecs;
         trialInfo{trialCount+1}.flipTimes = flipTimes;
 
-        % write the BIDS format of the current trial
-        trialInfo_trialBIDS = cellfun(@(f) trialInfo{trialCount+1}.(f), BIDS_out, 'UniformOutput', false);
-        writecell(trialInfo_trialBIDS,[filename_full '.csv'],'FileType','text','Delimiter',',','WriteMode','append')
+        % write the BIDS format of the current trial        
+        % BIDS_out = {'onset','duration','trial_type','trial_num','block_num','cue_brightness'};
+        BIDS_out_sound1 = {trialInfo{trialCount+1}.audio1Start, sound1TimeSecs,['Sound/',trialInfo{trialCount+1}.sound1],trialCount+1,trialInfo{trialCount+1}.block,'n/a'};
+        BIDS_out_sound2 = {trialInfo{trialCount+1}.audio2Start, sound2TimeSecs,['Sound/',trialInfo{trialCount+1}.sound2],trialCount+1,trialInfo{trialCount+1}.block,'n/a'};
+        BIDS_out_delay1 = {trialInfo{trialCount+1}.del1Start, trialInfo{trialCount+1}.del1End-trialInfo{trialCount+1}.del1Start,'Delay/Delay1',trialCount+1,trialInfo{trialCount+1}.block,'n/a'};
+        BIDS_out_cue = {trialInfo{trialCount+1}.del1End, trialInfo{trialCount+1}.cueEnd-trialInfo{trialCount+1}.del1End,strjoin(["Cue/",retro_Tags{retro_trials(iTrials)}],""),trialCount+1,trialInfo{trialCount+1}.block,trialInfo{trialCount+1}.cue_brightness};
+        BIDS_out_delay2 = {trialInfo{trialCount+1}.cueEnd, trialInfo{trialCount+1}.del2End-trialInfo{trialCount+1}.cueEnd,'Delay/Delay2',trialCount+1,trialInfo{trialCount+1}.block,'n/a'};
+        BIDS_out_go = {trialInfo{trialCount+1}.del2End, trialInfo{trialCount+1}.goEnd-trialInfo{trialCount+1}.del2End,'Go',trialCount+1,trialInfo{trialCount+1}.block,'n/a'};
+        BIDS_out_resp = {trialInfo{trialCount+1}.goEnd, trialInfo{trialCount+1}.respEnd-trialInfo{trialCount+1}.goEnd,'Resp',trialCount+1,trialInfo{trialCount+1}.block,'n/a'};
+        BIDS_out_ISI = {trialInfo{trialCount+1}.respEnd, trialInfo{trialCount+1}.isiEnd-trialInfo{trialCount+1}.respEnd,'ISI',trialCount+1,trialInfo{trialCount+1}.block,'n/a'};
+
+        writecell(BIDS_out_sound1,[filename_full '.csv'],'FileType','text','Delimiter',',','WriteMode','append')
+        writecell(BIDS_out_sound2,[filename_full '.csv'],'FileType','text','Delimiter',',','WriteMode','append')
+        writecell(BIDS_out_delay1,[filename_full '.csv'],'FileType','text','Delimiter',',','WriteMode','append')
+        writecell(BIDS_out_cue,[filename_full '.csv'],'FileType','text','Delimiter',',','WriteMode','append')
+        writecell(BIDS_out_delay2,[filename_full '.csv'],'FileType','text','Delimiter',',','WriteMode','append')
+        writecell(BIDS_out_go,[filename_full '.csv'],'FileType','text','Delimiter',',','WriteMode','append')
+        writecell(BIDS_out_resp,[filename_full '.csv'],'FileType','text','Delimiter',',','WriteMode','append')
+        writecell(BIDS_out_ISI,[filename_full '.csv'],'FileType','text','Delimiter',',','WriteMode','append')
+
 
         save([subjectDir '/' num2str(subject) '_Block_' num2str(iBStart) fileSuff '_TrialData.mat'],'trialInfo')
 
