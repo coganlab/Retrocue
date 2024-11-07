@@ -174,17 +174,18 @@ for iB=iBStart:nBlocks %nBlocks;
 
     nTrials=84; %168/4; %rotNumb*3;
 
-    cueTimeBaseSeconds= 1  ; % 1.5 up to 5/26/2019 % 0.5 Base Duration of Cue s
+    cueTimeBaseSeconds= 0.7  ; % 1.5 up to 5/26/2019 % 0.5 Base Duration of Cue s
     gapTimeSound12=0.35; % Time gap between sound1 and sound2
     delTimeBaseSecondsA = 2; % 0.75 Base Duration of Del s
     goTimeBaseSeconds = 0.5; % 0.5 Base Duration Go Cue Duration s
     respTimeSecondsA = 2.5; % 1.5 Response Duration s
-    isiTimeBaseSeconds = 0.87; % 0.5 Base Duration of ISI s
+    isiTimeBaseSeconds = 0.75; % 0.5 Base Duration of ISI s
 
-    cueTimeJitterSeconds = 0.2; % 0.25; % Cue Jitter s
-    delTimeJitterSeconds = 0.2;% 0.5; % Del Jitter s
-    goTimeJitterSeconds = 0.1;% 0.25; % Go Jitter s
-    isiTimeJitterSeconds = 0.2; % 0.5; % ISI Jitter s
+    cueTimeJitterSeconds = 0.25; % 0.25; % Cue Jitter s
+    delTimeJitterSeconds = 0.25;% 0.5; % Del Jitter s
+    goTimeJitterSeconds = 0.25;% 0.25; % Go Jitter s
+    isiTimeJitterSeconds = 0.25; % 0.5; % ISI Jitter s
+    gapTimeSound12Jitter = 0.25;
 
     soundBlockPlay=[];
 
@@ -324,7 +325,9 @@ for iB=iBStart:nBlocks %nBlocks;
         sound1TimeFrames = ceil(sound1TimeSecs / ifi);
         sound2TimeSecs = length(sound2)./freqS; 
         sound2TimeFrames = ceil(sound2TimeSecs / ifi);
-        gapSound12TimeFrames = ceil(gapTimeSound12 / ifi);
+        
+        gapTimeSound12_whole = gapTimeSound12 + gapTimeSound12Jitter*rand(1,1);
+        gapSound12TimeFrames = round(gapTimeSound12_whole / ifi);
 
         cueTimeBaseFrames = round((cueTimeBaseSeconds+(cueTimeJitterSeconds*rand(1,1))) / ifi);
 
@@ -447,9 +450,8 @@ for iB=iBStart:nBlocks %nBlocks;
             % Draw oval for 10 frames (duration of binary code with start/stop bit)
             if i<=3
                 Screen('FillOval', window, circleColor1, centeredCircle, baseCircleDiam); % leave on!
-            end
-
-            if i<=0.625*cueTimeBaseFrames
+            else
+            % if i<=0.625*cueTimeBaseFrames
                 % Draw text
                 DrawFormattedText(window, cue, 'center', 'center', [1 1 1]*retroB);
             end
