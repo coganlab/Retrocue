@@ -50,10 +50,10 @@ sound_a = padarray(sound_a, [(max_len - len_a)/2, 0], 0, 'both');
 
 if practice==1
     nBlocks = 1;
-    fileSuff = '';
+    fileSuff = '_Pract';
 else
     nBlocks = 4;
-    fileSuff = '_Pract';
+    fileSuff = '';
 end
 
 trialCount=0;
@@ -478,7 +478,11 @@ for iB=iBStart:nBlocks %nBlocks;
 
         if retro_trials(iTrials)~=5 % Repeat both
             for i=1:goTimeFrames
-                texture_func();
+                if i<=3
+                    Screen('FillOval', window, circleColor1, centeredCircle, baseCircleDiam); % leave on!
+                else
+                    texture_func();
+                end
                 %DrawFormattedText(window, go, 'center', 'center', [1 1 1]);
                 Screen('Flip', window);
             end
