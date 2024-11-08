@@ -261,7 +261,6 @@ for iB=iBStart:nBlocks %nBlocks;
     % Play the tone
     %PsychPortAudio('Start', pahandle, repetitions, StartCue, WaitForDeviceStart);
     PsychPortAudio('Start',soundBuffer{1, 4},repetitions,StartCue,WaitForDeviceStart);
-    PsychPortAudio('Volume', pahandle, 0.5);
 
     toneTimeSecs = (freqS+length(tone500))./freqS; %max(cat(1,length(kig),length(pob)))./freqS;
     toneTimeFrames = ceil(toneTimeSecs / ifi);
