@@ -253,7 +253,7 @@ for iB=iBStart:nBlocks %nBlocks;
     PsychPortAudio('FillBuffer', soundBuffer{1,3}, [sound_a,sound_a]');
     
     soundBuffer{1,4}=PsychPortAudio('OpenSlave', pahandle,1,2);
-    PsychPortAudio('FillBuffer', soundBuffer{1,4}, [tone500*0.1,tone500*0.1]');
+    PsychPortAudio('FillBuffer', soundBuffer{1,4}, [tone500,tone500]');
 
     % Start pahandle
     PsychPortAudio('Start', pahandle,0,0);
