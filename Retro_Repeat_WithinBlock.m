@@ -239,7 +239,7 @@ for iB=iBStart:nBlocks %nBlocks;
     PsychPortAudio('Start', pahandle2, 0, 0, 1);
 
     % Setup audio replay
-    pahandle = PsychPortAudio('Open', playbackdevID, 1+8, 2, freqS, nrchannels_play,0, 0.015);
+    pahandle = PsychPortAudio('Open', playbackdevID, 1+8, 2, freqS, nrchannels_play);
     PsychPortAudio('Volume', pahandle, 1); % volume
 
     % load sound buffer
