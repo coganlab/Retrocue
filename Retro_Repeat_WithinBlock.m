@@ -34,15 +34,15 @@ retro_Tags = {"REP_BTH","REV_BTH","REP_1ST","REP_2ND","DRP_BTH"};
 [sound_a, fs] = audioread(fullfile('stim',[stim_Tags{3},stim_Suffix,'.wav']));
 [tone500, ~]=audioread(fullfile('stim','tone500_3.wav'));
 
-len_i = length(sound_i);
-len_o = length(sound_o);
-len_a = length(sound_a);
-
-max_len = max([len_i, len_o, len_a]);
-
-sound_i = padarray(sound_i, [(max_len - len_i)/2, 0], 0, 'both');
-sound_o = padarray(sound_o, [(max_len - len_o)/2, 0], 0, 'both');
-sound_a = padarray(sound_a, [(max_len - len_a)/2, 0], 0, 'both');
+% len_i = length(sound_i);
+% len_o = length(sound_o);
+% len_a = length(sound_a);
+% 
+% max_len = max([len_i, len_o, len_a]);
+% 
+% sound_i = padarray(sound_i, [(max_len - len_i)/2, 0], 0, 'both');
+% sound_o = padarray(sound_o, [(max_len - len_o)/2, 0], 0, 'both');
+% sound_a = padarray(sound_a, [(max_len - len_a)/2, 0], 0, 'both');
 
 %============================================
 %        experiment parameter settings
