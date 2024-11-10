@@ -1,6 +1,24 @@
 function [trial_No,block_No,Syll1_No,Syll2_No,Retro_No,Retro_Brightness]=read_trials(subject,stim_Tags,retro_Tags)
 
-filename = fullfile('trials',[subject,'_trial_list.xlsx']);
+filename = fullfile('trials',strjoin([subject '_trial_list.xlsx'],""));
+
+if ~isfile(filename)
+    backupFiles = dir(fullfile('trials', '*backup_trial_list*.xlsx'));
+    
+    if ~isempty(backupFiles)
+        backupFile = fullfile('trials', backupFiles(1).name);
+        movefile(backupFile, filename);
+        disp(strjoin(['File renamed from ', backupFiles(1).name, ' to ',[subject '_trial_list.xlsx']],""));
+    else
+        error('No backup file found in the directory.');
+    end
+
+end
+
+data = readtable(filename);
+disp('File loaded successfully.');
+
+
 data = readtable(filename);
 numRows = height(data);
 
