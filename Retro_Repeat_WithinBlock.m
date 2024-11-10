@@ -525,8 +525,8 @@ for iB=iBStart:nBlocks %nBlocks;
 
         % write the BIDS format of the current trial        
         % BIDS_out = {'onset','duration','trial_type','trial_num','block_num','cue_brightness'};
-        BIDS_out_sound1 = {trialInfo{trialCount+1}.audio1Start, sound1TimeSecs,['Sound/',trialInfo{trialCount+1}.sound1],trialCount+1,trialInfo{trialCount+1}.block,'n/a'};
-        BIDS_out_sound2 = {trialInfo{trialCount+1}.audio2Start, sound2TimeSecs,['Sound/',trialInfo{trialCount+1}.sound2],trialCount+1,trialInfo{trialCount+1}.block,'n/a'};
+        BIDS_out_sound1 = {trialInfo{trialCount+1}.audio1Start, sound1TimeSecs,['Sound1/',trialInfo{trialCount+1}.sound1],trialCount+1,trialInfo{trialCount+1}.block,'n/a'};
+        BIDS_out_sound2 = {trialInfo{trialCount+1}.audio2Start, sound2TimeSecs,['Sound2/',trialInfo{trialCount+1}.sound2],trialCount+1,trialInfo{trialCount+1}.block,'n/a'};
         BIDS_out_delay1 = {trialInfo{trialCount+1}.del1Start, trialInfo{trialCount+1}.del1End-trialInfo{trialCount+1}.del1Start,'Delay/Delay1',trialCount+1,trialInfo{trialCount+1}.block,'n/a'};
         BIDS_out_cue = {trialInfo{trialCount+1}.del1End, trialInfo{trialCount+1}.cueEnd-trialInfo{trialCount+1}.del1End,strjoin(["Cue/",retro_Tags{retro_trials(iTrials)}],""),trialCount+1,trialInfo{trialCount+1}.block,trialInfo{trialCount+1}.cue_brightness};
         BIDS_out_delay2 = {trialInfo{trialCount+1}.cueEnd, trialInfo{trialCount+1}.del2End-trialInfo{trialCount+1}.cueEnd,'Delay/Delay2',trialCount+1,trialInfo{trialCount+1}.block,'n/a'};
