@@ -82,8 +82,9 @@ end
 filename_full = fullfile(subjectDir, [subject fileSuff]);
 
 % initialize BIDS_output
-BIDS_out = {'onset','duration','trial_type','trial_num','block_num','cue_brightness'};
-writecell(BIDS_out,[filename_full '.csv'],'FileType','text','Delimiter',',')
+
+fileID = fopen([filename_full '.csv'], 'w');
+fprintf(fileID, 'onset,duration,trial_type,trial_num,block_num,cue_brightness\n');
 
 % Initialize Sounddriver
 InitializePsychSound(1);
@@ -534,22 +535,24 @@ for iB=iBStart:nBlocks %nBlocks;
         BIDS_out_resp = {trialInfo{trialCount+1}.goEnd, trialInfo{trialCount+1}.respEnd-trialInfo{trialCount+1}.goEnd,'Resp',trialCount+1,trialInfo{trialCount+1}.block,'n/a'};
         BIDS_out_ISI = {trialInfo{trialCount+1}.respEnd, trialInfo{trialCount+1}.isiEnd-trialInfo{trialCount+1}.respEnd,'ISI',trialCount+1,trialInfo{trialCount+1}.block,'n/a'};
 
-        writecell(BIDS_out_sound1,[filename_full '.csv'],'FileType','text','Delimiter',',','WriteMode','append')
-        writecell(BIDS_out_sound2,[filename_full '.csv'],'FileType','text','Delimiter',',','WriteMode','append')
-        writecell(BIDS_out_delay1,[filename_full '.csv'],'FileType','text','Delimiter',',','WriteMode','append')
-        writecell(BIDS_out_cue,[filename_full '.csv'],'FileType','text','Delimiter',',','WriteMode','append')
-        writecell(BIDS_out_delay2,[filename_full '.csv'],'FileType','text','Delimiter',',','WriteMode','append')
-        writecell(BIDS_out_go,[filename_full '.csv'],'FileType','text','Delimiter',',','WriteMode','append')
-        writecell(BIDS_out_resp,[filename_full '.csv'],'FileType','text','Delimiter',',','WriteMode','append')
-        writecell(BIDS_out_ISI,[filename_full '.csv'],'FileType','text','Delimiter',',','WriteMode','append')
+        data_cells = {BIDS_out_sound1, BIDS_out_sound2, BIDS_out_delay1, BIDS_out_cue, ...
+                      BIDS_out_delay2, BIDS_out_go, BIDS_out_resp, BIDS_out_ISI};
+        
+        for i = 1:length(data_cells)
+            onset = data_cells{i}{1};
+            duration = data_cells{i}{2};
+            trial_type = data_cells{i}{3};
+            trial_num = data_cells{i}{4};
+            block_num = data_cells{i}{5};
+            cue_brightness = data_cells{i}{6};
+            fprintf(fileID, '%.17f,%.17f,%s,%d,%d,%.17f\n', onset, duration, trial_type, trial_num, block_num, cue_brightness);
+        end
 
-
+                
         save([subjectDir '/' subject '_Block_' num2str(iBStart) fileSuff '_TrialData.mat'],'trialInfo')
 
         trialCount=trialCount+1;
 
-        %       end
-        %tmp1=0;
     end
 
     Priority(0);
@@ -576,6 +579,7 @@ for iB=iBStart:nBlocks %nBlocks;
     end
 
 end
+fclose(fileID);
 sca
 close all
 %clear all
