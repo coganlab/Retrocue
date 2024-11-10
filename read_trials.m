@@ -1,6 +1,6 @@
 function [trial_No,block_No,Syll1_No,Syll2_No,Retro_No,Retro_Brightness]=read_trials(subject,stim_Tags,retro_Tags)
 
-filename = fullfile('trials',['subject_',num2str(subject),'_trial_list.xlsx']);
+filename = fullfile('trials',[subject,'_trial_list.xlsx']);
 data = readtable(filename);
 numRows = height(data);
 

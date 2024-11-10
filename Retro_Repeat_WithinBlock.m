@@ -15,7 +15,7 @@ sca;
 %capturedevID = 6; %1; % 2 for usb amp, 1 without
 %subject = 'Test2';
 c = clock;
-subjectDir = fullfile('data', [num2str(subject), '_' num2str(c(1)) num2str(c(2)) num2str(c(3)) num2str(c(4)) num2str(c(5))]);
+subjectDir = fullfile('data', [subject, '_' num2str(c(1)) num2str(c(2)) num2str(c(3)) num2str(c(4)) num2str(c(5))]);
 
 %============================================
 %        load the sounds
@@ -79,7 +79,7 @@ elseif ~exist(subjectDir,'dir')
     mkdir(subjectDir)
 end
 
-filename_full = fullfile(subjectDir, [num2str(subject) fileSuff]);
+filename_full = fullfile(subjectDir, [subject fileSuff]);
 
 % initialize BIDS_output
 BIDS_out = {'onset','duration','trial_type','trial_num','block_num','cue_brightness'};
@@ -544,7 +544,7 @@ for iB=iBStart:nBlocks %nBlocks;
         writecell(BIDS_out_ISI,[filename_full '.csv'],'FileType','text','Delimiter',',','WriteMode','append')
 
 
-        save([subjectDir '/' num2str(subject) '_Block_' num2str(iBStart) fileSuff '_TrialData.mat'],'trialInfo')
+        save([subjectDir '/' subject '_Block_' num2str(iBStart) fileSuff '_TrialData.mat'],'trialInfo')
 
         trialCount=trialCount+1;
 
@@ -554,7 +554,7 @@ for iB=iBStart:nBlocks %nBlocks;
 
     Priority(0);
     [audiodata offset overflow tCaptureStart] = PsychPortAudio('GetAudioData', pahandle2);
-    filename = ([num2str(subject) '_Block_' num2str(iB) fileSuff '_AllTrials.wav']);
+    filename = ([subject '_Block_' num2str(iB) fileSuff '_AllTrials.wav']);
     audiowrite([subjectDir '/' filename],audiodata,freqR);
     PsychPortAudio('Stop', pahandle2);
     PsychPortAudio('Close', pahandle2);
