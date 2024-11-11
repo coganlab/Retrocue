@@ -166,7 +166,7 @@ for iB=iBStart:nBlocks %nBlocks;
 
     trial_idx=find(block_No==iB);
     if practice==1
-        trial_idx=trial_idx(1:12);
+        trial_idx=trial_idx(1:24);
     end
 
     syll1_trials=Syll1_No(trial_idx);
