@@ -91,11 +91,12 @@ InitializePsychSound(1);
 %           load trials infomation
 %============================================
 
-[~,block_No,Syll1_No,Syll2_No,Retro_No,Retro_Brightness]=read_trials(subject,stim_Tags,retro_Tags);
 if practice==1
     nBlocks = 1;
+    [~,block_No,Syll1_No,Syll2_No,Retro_No,Retro_Brightness]=read_trials('Prac',stim_Tags,retro_Tags);
 else
     nBlocks = max(block_No);
+    [~,block_No,Syll1_No,Syll2_No,Retro_No,Retro_Brightness]=read_trials(subject,stim_Tags,retro_Tags);
 end
 
 imgDir = fullfile("stim","circle_green.png");
@@ -150,7 +151,13 @@ texture_func = @() Screen('DrawTexture', window, texture, [], dstRect);
 % Ready Loop
 while ~KbCheck
     % Flip to the screen
-    DrawFormattedText(window, 'Listen to two sounds carefully and keep them in mind. \nIf you see the cue [1 2], please repeat in order. \nIf you see the cue [2 1], please repeat in reversed order. \nIf you see the cue [1], please repeat the first one \nIf you see the cue [2], please repeat the second one \nIf you see the cue [0], forget the sounds \nPress any key to start. ', 'center', 'center', [1 1 1],58);
+    DrawFormattedText(window, ['Listen to two sounds carefully, keep in mind, and repeat after the green circle. \n' ...
+        '[1 2]: repeat in order. \n' ...
+        '[2 1]: repeat in reversed order. \n' ...
+        '[1]: repeat the first sound \n' ...
+        '[2]: repeat the second sound \n' ...
+        '[0]: forget the sounds \n' ...
+        'Press any key to start. '], 'center', 'center', [1 1 1],58);
 
     Screen('Flip', window);
     WaitSecs(0.001);
@@ -165,24 +172,21 @@ end
 for iB=iBStart:nBlocks %nBlocks;
 
     trial_idx=find(block_No==iB);
-    if practice==1
-        trial_idx=trial_idx(1:24);
-    end
 
     syll1_trials=Syll1_No(trial_idx);
     syll2_trials=Syll2_No(trial_idx);
     retro_trials=Retro_No(trial_idx);
     retro_brightness_trials=Retro_Brightness(trial_idx);
+        
+    if practice~=1
+        Screen('TextSize', window, 100);
+    end
 
-    Screen('TextSize', window, 100);
-
-    nTrials=84; %168/4; %rotNumb*3;
-
-    cueTimeBaseSeconds= 0.7  ; % 1.5 up to 5/26/2019 % 0.5 Base Duration of Cue s
+    cueTimeBaseSeconds= 0.5  ; % 1.5 up to 5/26/2019 % 0.5 Base Duration of Cue s
     gapTimeSound12=0.35; % Time gap between sound1 and sound2
     delTimeBaseSecondsA = 2; % 0.75 Base Duration of Del s
-    goTimeBaseSeconds = 0.5; % 0.5 Base Duration Go Cue Duration s
-    respTimeSecondsA = 2.5; % 1.5 Response Duration s
+    goTimeBaseSeconds = 0.25; % 0.5 Base Duration Go Cue Duration s
+    respTimeSecondsA = 1.5; % 1.5 Response Duration s
     isiTimeBaseSeconds = 0.75; % 0.5 Base Duration of ISI s
 
     cueTimeJitterSeconds = 0.25; % 0.25; % Cue Jitter s
@@ -288,6 +292,36 @@ for iB=iBStart:nBlocks %nBlocks;
     Priority(2);
 
     for iTrials=1:length(trial_idx) %trialEnd ;%nTrials %nTrials;
+
+        %============================================
+        %         practice session only
+        %============================================
+        if practice==1
+            if ismember(iTrials,1:3:16)
+                while ~KbCheck
+                    switch iTrials
+                        case 1
+                            Prac_instruct='repeat in order';
+                        case 4
+                            Prac_instruct='repeat in reversed order';
+                        case 7
+                            Prac_instruct='repeat the first sound';
+                        case 10
+                            Prac_instruct='repeat the second sound';
+                        case 13
+                            Prac_instruct='forget the sounds and do not repeat';
+                        case 16
+                            Prac_instruct='repeat according to the numbers on the screen';
+                    end
+                    DrawFormattedText(window, ['Practice: listen to two sounds carefully, keep in mind, \n' ...
+                        'and ' Prac_instruct '.\n' ...
+                        ' Press any key to start. '],...
+                        'center', 'center', [1 1 1],58);
+                    Screen('Flip', window);
+                    WaitSecs(0.001);
+                end
+            end
+        end
 
         %============================================
         %         get prepared for a trial
@@ -548,7 +582,11 @@ for iB=iBStart:nBlocks %nBlocks;
             trial_num = data_cells{i}{4};
             block_num = data_cells{i}{5};
             cue_brightness = data_cells{i}{6};
-            fprintf(fileID, '%.17f,%.17f,%s,%d,%d,%.17f\n', onset, duration, trial_type, trial_num, block_num, cue_brightness);
+            if i~=4
+                fprintf(fileID, '%.17f,%.17f,%s,%d,%d,%s\n', onset, duration,trial_type, trial_num, block_num, cue_brightness);
+            else
+                fprintf(fileID, '%.17f,%.17f,%s,%d,%d,%.17f\n', onset, duration,strjoin(trial_type,""), trial_num, block_num, cue_brightness);
+            end
         end
 
                 
