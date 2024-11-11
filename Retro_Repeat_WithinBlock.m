@@ -92,11 +92,11 @@ InitializePsychSound(1);
 %============================================
 
 if practice==1
-    nBlocks = 1;
     [~,block_No,Syll1_No,Syll2_No,Retro_No,Retro_Brightness]=read_trials('Prac',stim_Tags,retro_Tags);
+    nBlocks = 1;
 else
-    nBlocks = max(block_No);
     [~,block_No,Syll1_No,Syll2_No,Retro_No,Retro_Brightness]=read_trials(subject,stim_Tags,retro_Tags);
+    nBlocks = max(block_No);
 end
 
 imgDir = fullfile("stim","circle_green.png");
