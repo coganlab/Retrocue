@@ -181,7 +181,7 @@ for iB=iBStart:nBlocks %nBlocks;
     Screen('TextSize', window, 100);
     
 
-    cueTimeBaseSeconds= 0.5  ; % 1.5 up to 5/26/2019 % 0.5 Base Duration of Cue s
+    cueTimeBaseSeconds= 0.7  ; % 1.5 up to 5/26/2019 % 0.5 Base Duration of Cue s
     gapTimeSound12=0.35; % Time gap between sound1 and sound2
     delTimeBaseSecondsA = 2; % 0.75 Base Duration of Del s
     goTimeBaseSeconds = 0.25; % 0.5 Base Duration Go Cue Duration s
@@ -300,15 +300,15 @@ for iB=iBStart:nBlocks %nBlocks;
                 while ~KbCheck
                     switch iTrials
                         case 1
-                            Prac_instruct='repeat in order';
+                            Prac_instruct='after seeing the [1 2], continue to keep the sounds in mind. After a green circle is shown, repeat the two sounds in order';
                         case 4
-                            Prac_instruct='repeat in reversed order';
+                            Prac_instruct='after seeing the [2 1], change the order of sounds in mind. After a green circle is shown, repeat the two sounds in the changed order';
                         case 7
-                            Prac_instruct='repeat the first sound';
+                            Prac_instruct='after seeing the [1], keep the first sound in mind and forget the second. After a green circle is shown, repeat the first sound';
                         case 10
-                            Prac_instruct='repeat the second sound';
+                            Prac_instruct='after seeing the [2], keep the second sound in mind and forget the first. After a green circle is shown, repeat the first sound';
                         case 13
-                            Prac_instruct='forget the sounds and do not repeat';
+                            Prac_instruct='after seeing the [0], forget both sounds and do not repeat';
                         case 16
                             Prac_instruct='repeat according to the numbers on the screen';
                     end
