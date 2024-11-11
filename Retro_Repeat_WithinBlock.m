@@ -486,7 +486,7 @@ for iB=iBStart:nBlocks %nBlocks;
         retroB=retro_brightness_trials(iTrials);
         for i = 1:cueTimeBaseFrames
             % Draw oval for 10 frames (duration of binary code with start/stop bit)
-            if i<=3
+            if i<=1
                 Screen('FillOval', window, circleColor1, centeredCircle, baseCircleDiam); % leave on!
             else
             % if i<=0.625*cueTimeBaseFrames
@@ -516,7 +516,7 @@ for iB=iBStart:nBlocks %nBlocks;
 
         if retro_trials(iTrials)~=5 % Repeat both
             for i=1:goTimeFrames
-                if i<=3
+                if i<=1
                     Screen('FillOval', window, circleColor1, centeredCircle, baseCircleDiam); % leave on!
                 else
                     texture_func();
