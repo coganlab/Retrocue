@@ -178,9 +178,8 @@ for iB=iBStart:nBlocks %nBlocks;
     retro_trials=Retro_No(trial_idx);
     retro_brightness_trials=Retro_Brightness(trial_idx);
         
-    if practice~=1
-        Screen('TextSize', window, 100);
-    end
+    Screen('TextSize', window, 100);
+    
 
     cueTimeBaseSeconds= 0.5  ; % 1.5 up to 5/26/2019 % 0.5 Base Duration of Cue s
     gapTimeSound12=0.35; % Time gap between sound1 and sound2
@@ -313,6 +312,7 @@ for iB=iBStart:nBlocks %nBlocks;
                         case 16
                             Prac_instruct='repeat according to the numbers on the screen';
                     end
+                    Screen('TextSize', window, 50);
                     DrawFormattedText(window, ['Practice: listen to two sounds carefully, keep in mind, \n' ...
                         'and ' Prac_instruct '.\n' ...
                         ' Press any key to start. '],...
@@ -321,6 +321,7 @@ for iB=iBStart:nBlocks %nBlocks;
                     WaitSecs(0.001);
                 end
             end
+            Screen('TextSize', window, 100);
         end
 
         %============================================
