@@ -41,7 +41,7 @@ for i = 1:numRows
             % /i/
             Syll1_No(i) =  1;
         case stim_Tags{2}
-            % /u/
+            % /o/
             Syll1_No(i) =  2;
         case stim_Tags{3}
             % /a/
@@ -54,7 +54,7 @@ for i = 1:numRows
             % /i/
             Syll2_No(i) =  1;
         case stim_Tags{2}
-            % /u/
+            % /o/
             Syll2_No(i) =  2;
         case stim_Tags{3}
             % /a/

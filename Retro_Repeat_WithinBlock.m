@@ -24,8 +24,8 @@ subjectDir = fullfile('data', [subject, '_' num2str(c(1)) num2str(c(2)) num2str(
 stim_Tags = {'ree','mo','ga'}; % Subject3
 %stim_Tags = {'click1','click2','click3'}; % Subject1
 %stim_Tags = {'click1','click1','click1'};  % Subject2
-%stim_Suffix = '_gTTS_rms';
-stim_Suffix = '_human_rms';
+stim_Suffix = '_gTTS_rms';
+%stim_Suffix = '_human_rms';
 
 retro_Tags = {"REP_BTH","REV_BTH","REP_1ST","REP_2ND","DRP_BTH"};
 
@@ -210,20 +210,20 @@ for iB=iBStart:nBlocks %nBlocks;
         end
 
         switch syll1_trials(i)
-            case 1 % she
+            case 1 % ree
                 soundBlockPlay{i}.sound1=sound_i;
-            case 2 % do
+            case 2 % mo
                 soundBlockPlay{i}.sound1=sound_o;
-            case 3 % ma
+            case 3 % ga
                 soundBlockPlay{i}.sound1=sound_a;
         end
 
         switch syll2_trials(i)
-            case 1 % she
+            case 1 % ree
                 soundBlockPlay{i}.sound2=sound_i;
-            case 2 % do
+            case 2 % mo
                 soundBlockPlay{i}.sound2=sound_o;
-            case 3 % ma
+            case 3 % ga
                 soundBlockPlay{i}.sound2=sound_a;
         end
 
@@ -355,12 +355,12 @@ for iB=iBStart:nBlocks %nBlocks;
         %============================================
 
         %Play Sound
+        sound1_play=soundBuffer{1, syll1_trials(iTrials)};
         Screen('FillOval', window, circleColor1, centeredCircle, baseCircleDiam);
         %PsychPortAudio('FillBuffer', pahandle, sound1');
 
         tWhen = GetSecs + (waitframes - 0.5)*ifi_window;
         tPredictedVisualOnset = PredictVisualOnsetForTime(window, tWhen);
-        sound1_play=soundBuffer{1, Syll1_No(iTrials)};
         %PsychPortAudio('Start', pahandle, 1, tPredictedVisualOnset, 0);
         PsychPortAudio('Start',sound1_play,repetitions,tPredictedVisualOnset,0);
 
@@ -402,10 +402,10 @@ for iB=iBStart:nBlocks %nBlocks;
         %============================================
 
         %Play Sound
+        sound2_play=soundBuffer{1, syll2_trials(iTrials)};
         Screen('FillOval', window, circleColor1, centeredCircle, baseCircleDiam);
         tWhen = GetSecs + (waitframes - 0.5)*ifi_window;
         tPredictedVisualOnset = PredictVisualOnsetForTime(window, tWhen);
-        sound2_play=soundBuffer{1, Syll2_No(iTrials)};
         %PsychPortAudio('Start', pahandle, 1, tPredictedVisualOnset, 0);
         PsychPortAudio('Start',sound2_play,repetitions,tPredictedVisualOnset,0);
 
