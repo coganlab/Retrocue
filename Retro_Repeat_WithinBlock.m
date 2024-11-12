@@ -243,7 +243,6 @@ for iB=iBStart:nBlocks %nBlocks;
     pahandle2 = PsychPortAudio('Open', capturedevID, 2, 0, freqR, nrchannels_rec,0, 0.015);
     % Preallocate an internal audio recording  buffer with a capacity of 10 seconds:
     PsychPortAudio('GetAudioData', pahandle2, 9000); %nTrials
-    PsychPortAudio('Start', pahandle2, 0, 0, 1);
 
     % Setup audio replay
     pahandle = PsychPortAudio('Open', playbackdevID, 1+8, 2, freqS, nrchannels_play);
@@ -265,6 +264,31 @@ for iB=iBStart:nBlocks %nBlocks;
     % Start pahandle
     PsychPortAudio('Start', pahandle,0,0);
 
+
+    ifi_window = Screen('GetFlipInterval', window);
+    suggestedLatencySecs = 0.015;
+    waitframes = ceil((2 * suggestedLatencySecs) / ifi_window) + 1;
+    Priority(2);
+
+    % Start recording
+    Screen('FillOval', window, circleColor1, centeredCircle, baseCircleDiam);
+    tWhen = GetSecs + (waitframes - 0.5)*ifi_window;
+    PsychPortAudio('Start', pahandle2, 0, 0, 1);
+    [~,trigFlipOn] = Screen('Flip', window, tWhen);
+    offset = 0;
+    while offset == 0
+        status = PsychPortAudio('GetStatus', pahandle2);
+        offset = status.PositionSecs;
+        WaitSecs('YieldSecs', 0.001);
+    end
+    record_start = status.StartTime;
+    record_trigger_start = trigFlipOn;
+    DrawFormattedText(window, '', 'center', 'center', [1 1 1]);
+    % Flip to the screen
+    Screen('Flip', window);
+    fprintf(fileID, '%.17f,%.17f,%s,%d,%d,%s\n', record_start, record_start-record_trigger_start,'Record_onset', 0, iB, 'n/a');
+
+
     % Play the tone
     %PsychPortAudio('Start', pahandle, repetitions, StartCue, WaitForDeviceStart);
     PsychPortAudio('Start',soundBuffer{1, 4},repetitions,StartCue,WaitForDeviceStart);
@@ -279,16 +303,6 @@ for iB=iBStart:nBlocks %nBlocks;
     end
 
     PsychPortAudio('Stop',soundBuffer{1, 4});
-
-    % Rprelat = PsychPortAudio('LatencyBias', pahandle, 0) ;%#ok<NOPRT,NASGU>
-    % postlat = PsychPortAudio('LatencyBias', pahandle);
-
-    %
-    %while ~kbCheck
-    ifi_window = Screen('GetFlipInterval', window);
-    suggestedLatencySecs = 0.015;
-    waitframes = ceil((2 * suggestedLatencySecs) / ifi_window) + 1;
-    Priority(2);
 
     for iTrials=1:length(trial_idx) %trialEnd ;%nTrials %nTrials;
 
