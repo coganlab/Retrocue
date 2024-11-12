@@ -276,13 +276,11 @@ for iB=iBStart:nBlocks %nBlocks;
     tWhen = GetSecs + (waitframes - 0.5)*ifi_window;
     record_start=PsychPortAudio('Start', pahandle2, 0, 0, 1);
     [~,trigFlipOn] = Screen('Flip', window, tWhen);
-    % status = PsychPortAudio('GetStatus', pahandle2);
-    % record_start = status.StartTime;
     record_trigger_start = trigFlipOn;
     DrawFormattedText(window, '', 'center', 'center', [1 1 1]);
     % Flip to the screen
     Screen('Flip', window);
-    fprintf(fileID, '%.17f,%.17f,%s,%d,%d,%s\n', record_trigger_start, record_trigger_start-record_start,'Record_onset', 0, iB, 'n/a');
+    fprintf(fileID, '%.17f,%.17f,%s,%d,%d,%s\n', record_start, record_start-record_trigger_start,'Record_onset', 0, iB, 'n/a');
 
 
     % Play the tone
