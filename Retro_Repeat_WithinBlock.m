@@ -21,10 +21,11 @@ subjectDir = fullfile('data', [subject, '_' num2str(c(1)) num2str(c(2)) num2str(
 %        load the sounds
 %============================================
 
-stim_Tags = {'ree','mo','ga'}; % Subject3
+%stim_Tags = {'ree','mo','ga'}; % Subject3
 %stim_Tags = {'click1','click2','click3'}; % Subject1
-%stim_Tags = {'click1','click1','click1'};  % Subject2
-stim_Suffix = '_gTTS_rms';
+stim_Tags = {'click1','click1','click1'};  % Subject2
+stim_Suffix = [];
+%stim_Suffix = '_gTTS_rms';
 %stim_Suffix = '_human_rms';
 
 retro_Tags = {"REP_BTH","REV_BTH","REP_1ST","REP_2ND","DRP_BTH"};
@@ -273,20 +274,15 @@ for iB=iBStart:nBlocks %nBlocks;
     % Start recording
     Screen('FillOval', window, circleColor1, centeredCircle, baseCircleDiam);
     tWhen = GetSecs + (waitframes - 0.5)*ifi_window;
-    PsychPortAudio('Start', pahandle2, 0, 0, 1);
+    record_start=PsychPortAudio('Start', pahandle2, 0, 0, 1);
     [~,trigFlipOn] = Screen('Flip', window, tWhen);
-    offset = 0;
-    while offset == 0
-        status = PsychPortAudio('GetStatus', pahandle2);
-        offset = status.PositionSecs;
-        WaitSecs('YieldSecs', 0.001);
-    end
-    record_start = status.StartTime;
+    % status = PsychPortAudio('GetStatus', pahandle2);
+    % record_start = status.StartTime;
     record_trigger_start = trigFlipOn;
     DrawFormattedText(window, '', 'center', 'center', [1 1 1]);
     % Flip to the screen
     Screen('Flip', window);
-    fprintf(fileID, '%.17f,%.17f,%s,%d,%d,%s\n', record_start, record_start-record_trigger_start,'Record_onset', 0, iB, 'n/a');
+    fprintf(fileID, '%.17f,%.17f,%s,%d,%d,%s\n', record_trigger_start, record_trigger_start-record_start,'Record_onset', 0, iB, 'n/a');
 
 
     % Play the tone
