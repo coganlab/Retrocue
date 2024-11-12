@@ -21,12 +21,13 @@ subjectDir = fullfile('data', [subject, '_' num2str(c(1)) num2str(c(2)) num2str(
 %        load the sounds
 %============================================
 
-%stim_Tags = {'ree','mo','ga'}; % Subject3
+stim_Tags = {'ree','mo','ga'}; % Subject3
 %stim_Tags = {'click1','click2','click3'}; % Subject1
-stim_Tags = {'click1','click1','click1'};  % Subject2
-stim_Suffix = [];
+%stim_Tags = {'click1','click1','click1'};  % Subject2
+%stim_Suffix = [];
 %stim_Suffix = '_gTTS_rms';
 %stim_Suffix = '_human_rms';
+stim_Suffix = '_human2_rms';
 
 retro_Tags = {"REP_BTH","REV_BTH","REP_1ST","REP_2ND","DRP_BTH"};
 
@@ -184,7 +185,7 @@ for iB=iBStart:nBlocks %nBlocks;
 
     cueTimeBaseSeconds= 0.7  ; % 1.5 up to 5/26/2019 % 0.5 Base Duration of Cue s
     gapTimeSound12=0.35; % Time gap between sound1 and sound2
-    delTimeBaseSecondsA = 2; % 0.75 Base Duration of Del s
+    delTimeBaseSecondsA = 1.5; % 0.75 Base Duration of Del s
     goTimeBaseSeconds = 0.25; % 0.5 Base Duration Go Cue Duration s
     respTimeSecondsA = 1.5; % 1.5 Response Duration s
     isiTimeBaseSeconds = 0.75; % 0.5 Base Duration of ISI s
