@@ -31,16 +31,6 @@ retro_Tags = {"REP_BTH","REV_BTH","REP_1ST","REP_2ND","DRP_BTH"};
 [sound_a, fs] = audioread(fullfile('stim',[stim_Tags{3},stim_Suffix,'.wav']));
 [tone500, ~]=audioread(fullfile('stim','tone500_3.wav'));
 
-% len_i = length(sound_i);
-% len_o = length(sound_o);
-% len_a = length(sound_a);
-% 
-% max_len = max([len_i, len_o, len_a]);
-% 
-% sound_i = padarray(sound_i, [(max_len - len_i)/2, 0], 0, 'both');
-% sound_o = padarray(sound_o, [(max_len - len_o)/2, 0], 0, 'both');
-% sound_a = padarray(sound_a, [(max_len - len_a)/2, 0], 0, 'both');
-
 %============================================
 %        experiment parameter settings
 %============================================
@@ -150,9 +140,9 @@ while ~KbCheck
     % Flip to the screen
     DrawFormattedText(window, ['Listen to two sounds carefully, keep in mind, and repeat after the green circle. \n' ...
         '[1 2]: repeat in order. \n' ...
-        '[2 1]: repeat in reversed order. \n' ...
         '[1]: repeat the first sound \n' ...
         '[2]: repeat the second sound \n' ...
+        '[2 1]: repeat in reversed order. \n' ...
         '[0]: forget the sounds \n' ...
         'Press any key to start. '], 'center', 'center', [1 1 1],58);
 
@@ -304,20 +294,25 @@ for iB=iBStart:nBlocks %nBlocks;
                 while ~KbCheck
                     switch iTrials
                         case 1
-                            Prac_instruct='after seeing the [1 2], continue to keep the sounds in mind. After a green circle is shown, repeat the two sounds in order';
+                            Prac_instruct='after seeing the [1 2], continue to keep the two sounds in mind. Once a green circle is shown, repeat the two sounds in order';
                         case 4
-                            Prac_instruct='after seeing the [2 1], change the order of sounds in mind. After a green circle is shown, repeat the two sounds in the changed order';
+                            Prac_instruct='after seeing the [1], keep the first sound in mind and forget the second. Once a green circle is shown, repeat the first sound';
                         case 7
-                            Prac_instruct='after seeing the [1], keep the first sound in mind and forget the second. After a green circle is shown, repeat the first sound';
+                            Prac_instruct='after seeing the [2], keep the second sound in mind and forget the first. Once a green circle is shown, repeat the second sound';
                         case 10
-                            Prac_instruct='after seeing the [2], keep the second sound in mind and forget the first. After a green circle is shown, repeat the first sound';
+                            Prac_instruct='after seeing the [2 1], reverse the order of sounds in mind. Once a green circle is shown, repeat the two sounds in the reversed order';
                         case 13
                             Prac_instruct='after seeing the [0], forget both sounds and do not repeat';
                         case 16
-                            Prac_instruct='repeat according to the numbers on the screen';
+                            Prac_instruct=['complete each trial according to the numbers on the screen. \n ' ...
+                                '[1 2]: repeat in order. \n' ...
+                                '[1]: repeat the first sound \n' ...
+                                '[2]: repeat the second sound \n' ...
+                                '[2 1]: repeat in reversed order. \n' ...
+                                '[0]: forget the sounds \n'] ;
                     end
                     Screen('TextSize', window, 50);
-                    DrawFormattedText(window, ['Practice: listen to two sounds carefully, keep in mind, \n' ...
+                    DrawFormattedText(window, ['Practice: In the following trials, you will hear two sounds. Please keep them in mind, and \n' ...
                         'and ' Prac_instruct '.\n' ...
                         ' Press any key to start. '],...
                         'center', 'center', [1 1 1],58);
