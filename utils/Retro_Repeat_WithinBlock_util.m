@@ -1,4 +1,4 @@
-function Retro_Repeat_WithinBlock(subject,practice,startblock)
+function Retro_Repeat_WithinBlock_util(subject,practice,startblock)
 % Retro_Repeat_WithinBlock(subject,practice,startblock)
 % subject = subject number
 % practice =  practice or full task. 1 = 12 trial practice run, 2 = 2 x 42 trials
@@ -15,7 +15,7 @@ sca;
 %capturedevID = 6; %1; % 2 for usb amp, 1 without
 %subject = 'Test2';
 c = clock;
-subjectDir = fullfile('data', [subject, '_' num2str(c(1)) num2str(c(2)) num2str(c(3)) num2str(c(4)) num2str(c(5))]);
+subjectDir = fullfile('..','data', [subject, '_' num2str(c(1)) num2str(c(2)) num2str(c(3)) num2str(c(4)) num2str(c(5))]);
 
 %============================================
 %        load the sounds
@@ -26,10 +26,10 @@ stim_Suffix = '_gTTS_rms';
 
 retro_Tags = {"REP_BTH","REV_BTH","REP_1ST","REP_2ND","DRP_BTH"};
 
-[sound_i, ~] = audioread(fullfile('stim',[stim_Tags{1},stim_Suffix,'.wav']));
-[sound_o, ~] = audioread(fullfile('stim',[stim_Tags{2},stim_Suffix,'.wav']));
-[sound_a, fs] = audioread(fullfile('stim',[stim_Tags{3},stim_Suffix,'.wav']));
-[tone500, ~]=audioread(fullfile('stim','tone500_3.wav'));
+[sound_i, ~] = audioread(fullfile('..','stim',[stim_Tags{1},stim_Suffix,'.wav']));
+[sound_o, ~] = audioread(fullfile('..','stim',[stim_Tags{2},stim_Suffix,'.wav']));
+[sound_a, fs] = audioread(fullfile('..','stim',[stim_Tags{3},stim_Suffix,'.wav']));
+[tone500, ~]=audioread(fullfile('..','stim','tone500_3.wav'));
 
 %============================================
 %        experiment parameter settings
@@ -43,7 +43,6 @@ end
 
 trialCount=0;
 blockCount=0;
-%trialEnd=84; %54
 nrchannels_rec = 1;
 nrchannels_play = 2;
 iBStart=startblock;
@@ -86,7 +85,7 @@ else
     nBlocks = max(block_No);
 end
 
-imgDir = fullfile("stim","circle_green.png");
+imgDir = fullfile("..","stim","circle_green.png");
 [speak_pic,~,speak_pic_alpha] = imread(imgDir);
 speak_pic(:, :, 4) = speak_pic_alpha;
 
