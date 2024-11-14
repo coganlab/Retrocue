@@ -21,13 +21,8 @@ subjectDir = fullfile('data', [subject, '_' num2str(c(1)) num2str(c(2)) num2str(
 %        load the sounds
 %============================================
 
-stim_Tags = {'ree','mo','ga'}; % Subject3
-%stim_Tags = {'click1','click2','click3'}; % Subject1
-%stim_Tags = {'click1','click1','click1'};  % Subject2
-%stim_Suffix = [];
-%stim_Suffix = '_gTTS_rms';
-%stim_Suffix = '_human_rms';
-stim_Suffix = '_human2_rms';
+stim_Tags = {'ree','mo','ga'}; 
+stim_Suffix = '_gTTS_rms';
 
 retro_Tags = {"REP_BTH","REV_BTH","REP_1ST","REP_2ND","DRP_BTH"};
 
