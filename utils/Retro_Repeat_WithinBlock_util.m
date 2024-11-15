@@ -1,15 +1,14 @@
 function Retro_Repeat_WithinBlock_util(subject,practice,startblock)
-% Retro_Repeat_WithinBlock(subject,practice,startblock)
-% subject = subject number
-% practice =  practice or full task. 1 = 12 trial practice run, 2 = 2 x 42 trials
+% Retro_Repeat_WithinBlock_util(subject,practice,startblock)
+% subject (string) = subject number, string
+% practice (integer) =  practice or full task. 1 = full practice, 2 = mixed session 
+%             in practice only, other number = real task 
 % startblock = block to start from.  1 if new, >1 if needing to finish from
-%
-% previously run task
 
 sca;
-[playbackdevID,capturedevID] = getDevices;
-% playbackdevID=3;
-% capturedevID=1;
+% [playbackdevID,capturedevID] = getDevices;
+playbackdevID=3;
+capturedevID=1;
 
 %playbackdevID = 7; %3; % 4 for usb amp, 3 without
 %capturedevID = 6; %1; % 2 for usb amp, 1 without
@@ -37,6 +36,8 @@ retro_Tags = {"REP_BTH","REV_BTH","REP_1ST","REP_2ND","DRP_BTH"};
 
 if practice==1
     fileSuff = '_Pract';
+elseif practice==2
+    fileSuff = '_Pract_MIXED';
 else
     fileSuff = '';
 end
@@ -79,11 +80,12 @@ InitializePsychSound(1);
 
 if practice==1
     [~,block_No,Syll1_No,Syll2_No,Retro_No,Retro_Brightness]=read_trials('Prac',stim_Tags,retro_Tags);
-    nBlocks = 1;
+elseif practice==2
+    [~,block_No,Syll1_No,Syll2_No,Retro_No,Retro_Brightness]=read_trials('Prac_MIXED',stim_Tags,retro_Tags);
 else
     [~,block_No,Syll1_No,Syll2_No,Retro_No,Retro_Brightness]=read_trials(subject,stim_Tags,retro_Tags);
-    nBlocks = max(block_No);
 end
+nBlocks = max(block_No);
 
 imgDir = fullfile("..","stim","circle_green.png");
 [speak_pic,~,speak_pic_alpha] = imread(imgDir);
@@ -137,14 +139,7 @@ texture_func = @() Screen('DrawTexture', window, texture, [], dstRect);
 % Ready Loop
 while ~KbCheck
     % Flip to the screen
-    DrawFormattedText(window, ['Listen to two sounds carefully, keep in mind, and repeat after the green circle. \n' ...
-        '[1 2]: repeat in order. \n' ...
-        '[1]: repeat the first sound \n' ...
-        '[2]: repeat the second sound \n' ...
-        '[2 1]: repeat in reversed order. \n' ...
-        '[0]: forget the sounds \n' ...
-        'Press any key to start. '], 'center', 'center', [1 1 1],58);
-
+    DrawFormattedText(window, 'Press any key to start. ', 'center', 'center', [1 1 1],58);
     Screen('Flip', window);
     WaitSecs(0.001);
 end
@@ -289,37 +284,85 @@ for iB=iBStart:nBlocks %nBlocks;
         %         practice session only
         %============================================
         if practice==1
+            % full practice
             if ismember(iTrials,1:3:16)
                 while ~KbCheck
                     switch iTrials
                         case 1
-                            Prac_instruct='after seeing the [1 2], continue to keep the two sounds in mind. Once a green circle is shown, repeat the two sounds in order';
+                            topText = 'You will hear two sounds (1 and 2). Keep them in mind. \n Then you will see a cue on screen: ';
+                            Prac_cue='1 2';
+                            bottomText = 'After a delay, you will see a green circle. \n Repeat the two sounds as the green circle appears.';
                         case 4
-                            Prac_instruct='after seeing the [1], keep the first sound in mind and forget the second. Once a green circle is shown, repeat the first sound';
+                            topText = 'You will hear two sounds (1 and 2). Keep them in mind. \n Then you will see a cue on screen: ';
+                            Prac_cue='1';
+                            bottomText = 'After a delay, you will see a green circle. \n Repeat the first sound only as the green circle appears.';
                         case 7
-                            Prac_instruct='after seeing the [2], keep the second sound in mind and forget the first. Once a green circle is shown, repeat the second sound';
+                            topText = 'You will hear two sounds (1 and 2). Keep them in mind. \n Then you will see a cue on screen: ';
+                            Prac_cue='2';
+                            bottomText = 'After a delay, you will see a green circle. \n Repeat the second sound only as the green circle appears.';
                         case 10
-                            Prac_instruct='after seeing the [2 1], reverse the order of sounds in mind. Once a green circle is shown, repeat the two sounds in the reversed order';
+                            topText = 'You will hear two sounds (1 and 2). Keep them in mind. \n Then you will see a cue on screen: ';
+                            Prac_cue='2 1';
+                            bottomText = 'After a delay, you will see a green circle. \n Reverse the order of the two sounds and recall them \n as the green circle appears.';
                         case 13
-                            Prac_instruct='after seeing the [0], forget both sounds and do not repeat';
+                            topText = 'You will hear two sounds (1 and 2). Keep them in mind. \n Then you will see a cue on screen: ';
+                            Prac_cue='0';
+                            bottomText = 'Once you see the cue, forget both the sounds.';
                         case 16
-                            Prac_instruct=['complete each trial according to the numbers on the screen. \n ' ...
-                                '[1 2]: repeat in order. \n' ...
-                                '[1]: repeat the first sound \n' ...
-                                '[2]: repeat the second sound \n' ...
-                                '[2 1]: repeat in reversed order. \n' ...
-                                '[0]: forget the sounds \n'] ;
+                            topText = '';
+                            Prac_cue=['1 2 : repeat two sounds.\n\n' ...
+                                '1 : repeat the first sound.\n\n' ...
+                                '2 : repeat the second sound.\n\n' ...
+                                '2 1 : reverse and repeat two sounds.\n\n' ...
+                                '0 : forget both two sounds.\n\n'] ;
+                            bottomText = '';
                     end
+
+                    if ismember(iTrials,1:3:13)
+                        Screen('TextSize', window, 100);
+                    elseif iTrials==16
+                        Screen('TextSize', window, 50);
+                    end
+                    DrawFormattedText(window, Prac_cue, 'center', 'center', [1 1 1]);
+                    
+                    [normBoundsRect, ~] = Screen('TextBounds', window, Prac_cue);
+                    cueHeight = normBoundsRect(4) - normBoundsRect(2);
+                    
                     Screen('TextSize', window, 50);
-                    DrawFormattedText(window, ['Practice: In the following trials, you will hear two sounds. Please keep them in mind, and \n' ...
-                        'and ' Prac_instruct '.\n' ...
-                        ' Press any key to start. '],...
-                        'center', 'center', [1 1 1],58);
+                    DrawFormattedText(window, topText, 'center', yCenter - cueHeight / 2 - 120, [1 1 1]);
+                    
+                    DrawFormattedText(window, bottomText, 'center', yCenter + cueHeight / 2 + 120, [1 1 1]);
+                    
                     Screen('Flip', window);
+
                     WaitSecs(0.001);
                 end
             end
             Screen('TextSize', window, 100);
+
+        elseif practice==2
+            % full practice
+            if ismember(iTrials,1)
+                while ~KbCheck
+                    Prac_cue=['1 2 : repeat two sounds.\n\n' ...
+                        '1 : repeat the first sound.\n\n' ...
+                        '2 : repeat the second sound.\n\n' ...
+                        '2 1 : reverse and repeat two sounds.\n\n' ...
+                        '0 : forget both two sounds.\n\n'] ;
+
+                    Screen('TextSize', window, 50);
+                    DrawFormattedText(window, Prac_cue, 'center', 'center', [1 1 1]);
+                    
+                    [normBoundsRect, ~] = Screen('TextBounds', window, Prac_cue);
+                    cueHeight = normBoundsRect(4) - normBoundsRect(2);
+                    
+                    Screen('Flip', window);
+
+                    WaitSecs(0.001);
+                end
+            end
+            Screen('TextSize', window, 100);
+
         end
 
         %============================================
@@ -328,11 +371,11 @@ for iB=iBStart:nBlocks %nBlocks;
 
         
         % ! Currently I don't have the pase_script
-        if pause_script(window)
-            PsychPortAudio('close');
-            sca;
-             return;
-         end
+        % if pause_script(window)
+        %     PsychPortAudio('close');
+        %     sca;
+        %      return;
+        %  end
 
         switch retro_trials(iTrials)
             case 1 % REP_BTH
