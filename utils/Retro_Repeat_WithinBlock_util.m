@@ -6,9 +6,9 @@ function Retro_Repeat_WithinBlock_util(subject,practice,startblock)
 % startblock = block to start from.  1 if new, >1 if needing to finish from
 
 sca;
-% [playbackdevID,capturedevID] = getDevices;
-playbackdevID=3;
-capturedevID=1;
+[playbackdevID,capturedevID] = getDevices;
+% playbackdevID=3;
+% capturedevID=1;
 
 %playbackdevID = 7; %3; % 4 for usb amp, 3 without
 %capturedevID = 6; %1; % 2 for usb amp, 1 without
@@ -371,11 +371,11 @@ for iB=iBStart:nBlocks %nBlocks;
 
         
         % ! Currently I don't have the pase_script
-        % if pause_script(window)
-        %     PsychPortAudio('close');
-        %     sca;
-        %      return;
-        %  end
+        if pause_script(window)
+            PsychPortAudio('close');
+            sca;
+             return;
+         end
 
         switch retro_trials(iTrials)
             case 1 % REP_BTH

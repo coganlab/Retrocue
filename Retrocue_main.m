@@ -6,6 +6,7 @@ function Retrocue_main(subject,practice,startblock)
 %                  1 = full practice + real task (starting from block 1).
 %                  2 = mixed session in practice only + real task (starting from block 1).
 %                  other number = real task (starting from startblock).
+% startblock (integer) = starting block at the beginning.
 
 cd utils
 
