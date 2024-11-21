@@ -263,20 +263,22 @@ for iB=iBStart:nBlocks %nBlocks;
     fprintf(fileID, '%.17f,%.17f,%s,%d,%d,%s\n', record_start, record_start-record_trigger_start,'Record_onset', 0, iB, 'n/a');
 
 
-    % Play the tone
-    %PsychPortAudio('Start', pahandle, repetitions, StartCue, WaitForDeviceStart);
-    PsychPortAudio('Start',soundBuffer{1, 4},repetitions,StartCue,WaitForDeviceStart);
-
-    toneTimeSecs = (freqS+length(tone500))./freqS; %max(cat(1,length(kig),length(pob)))./freqS;
-    toneTimeFrames = ceil(toneTimeSecs / ifi);
-    for i=1:toneTimeFrames
-
-        DrawFormattedText(window, '', 'center', 'center', [1 1 1]);
-        % Flip to the screen
-        Screen('Flip', window);
+    if practice~=1 && practice~=2
+        % Play the tone
+        %PsychPortAudio('Start', pahandle, repetitions, StartCue, WaitForDeviceStart);
+        PsychPortAudio('Start',soundBuffer{1, 4},repetitions,StartCue,WaitForDeviceStart);
+    
+        toneTimeSecs = (freqS+length(tone500))./freqS; %max(cat(1,length(kig),length(pob)))./freqS;
+        toneTimeFrames = ceil(toneTimeSecs / ifi);
+        for i=1:toneTimeFrames
+    
+            DrawFormattedText(window, '', 'center', 'center', [1 1 1]);
+            % Flip to the screen
+            Screen('Flip', window);
+        end
+    
+        PsychPortAudio('Stop',soundBuffer{1, 4});
     end
-
-    PsychPortAudio('Stop',soundBuffer{1, 4});
 
     for iTrials=1:length(trial_idx) %trialEnd ;%nTrials %nTrials;
 
