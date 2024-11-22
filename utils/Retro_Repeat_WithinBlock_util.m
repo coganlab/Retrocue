@@ -6,9 +6,9 @@ function Retro_Repeat_WithinBlock_util(subject,practice,startblock)
 % startblock = block to start from.  1 if new, >1 if needing to finish from
 
 sca;
-[playbackdevID,capturedevID] = getDevices;
-% playbackdevID=3;
-% capturedevID=1;
+% [playbackdevID,capturedevID] = getDevices;
+playbackdevID=3;
+capturedevID=1;
 
 %playbackdevID = 7; %3; % 4 for usb amp, 3 without
 %capturedevID = 6; %1; % 2 for usb amp, 1 without
@@ -87,9 +87,25 @@ else
 end
 nBlocks = max(block_No);
 
-imgDir = fullfile("..","stim","circle_green.png");
-[speak_pic,~,speak_pic_alpha] = imread(imgDir);
+% Load go cue
+[speak_pic,~,speak_pic_alpha] = imread(fullfile("..","stim","circle_green.png"));
 speak_pic(:, :, 4) = speak_pic_alpha;
+
+% Load practice instruction
+[PRAC_REP_BTH_pic,~,PRAC_REP_BTH_pic_alpha] = imread(fullfile("..","stim","instructions","PRAC_REP_BTH.PNG"));
+% PRAC_REP_BTH_pic(:, :, 4) = PRAC_REP_BTH_pic_alpha;
+[PRAC_REP_1ST_pic,~,PRAC_REP_1ST_pic_alpha] = imread(fullfile("..","stim","instructions","PRAC_REP_1ST.PNG"));
+% PRAC_REP_1ST_pic(:, :, 4) = PRAC_REP_1ST_pic_alpha;
+[PRAC_REP_2ND_pic,~,PRAC_REP_2ND_pic_alpha] = imread(fullfile("..","stim","instructions","PRAC_REP_2ND.PNG"));
+% PRAC_REP_2ND_pic(:, :, 4) = PRAC_REP_2ND_pic_alpha;
+[PRAC_REV_BTH_pic,~,PRAC_REV_BTH_pic_alpha] = imread(fullfile("..","stim","instructions","PRAC_REV_BTH.PNG"));
+% PRAC_REV_BTH_pic(:, :, 4) = PRAC_REV_BTH_pic_alpha;
+[PRAC_DRP_BTH_pic,~,PRAC_DRP_BTH_pic_alpha] = imread(fullfile("..","stim","instructions","PRAC_DRP_BTH.PNG"));
+% PRAC_REV_BTH_pic(:, :, 4) = PRAC_REV_BTH_pic_alpha;
+[PRAC_mixed_pic,~,PRAC_mixed_pic_alpha] = imread(fullfile("..","stim","instructions","PRAC_mixed.PNG"));
+% PRAC_mixed_pic(:, :, 4) = PRAC_mixed_pic_alpha;
+[PRAC_END_pic,~,PRAC_END_pic_alpha] = imread(fullfile("..","stim","instructions","PRAC_END.PNG"));
+% PRAC_END_pic(:, :, 4) = PRAC_END_pic_alpha;
 
 %============================================
 %                screen setup
@@ -135,6 +151,32 @@ scaleFactor = 0.2;
 dstRect = CenterRectOnPointd([0, 0, imageWidth * scaleFactor, imageHeight * scaleFactor], screenXpixels / 2, screenYpixels / 2);
 texture = Screen('MakeTexture',window,speak_pic);
 texture_func = @() Screen('DrawTexture', window, texture, [], dstRect);
+
+% Instructions for Practice
+[imageHeight, imageWidth, ~] = size(PRAC_REP_BTH_pic);
+scaleFactor = 1;
+dstRect = CenterRectOnPointd([0, 0, imageWidth * scaleFactor, imageHeight * scaleFactor], screenXpixels / 2, screenYpixels / 2);
+
+PRAC_REP_BTH_texture = Screen('MakeTexture',window,PRAC_REP_BTH_pic);
+PRAC_REP_BTH_texture_func = @() Screen('DrawTexture', window, PRAC_REP_BTH_texture, [], dstRect);
+
+PRAC_REP_1ST_pic_texture = Screen('MakeTexture',window,PRAC_REP_1ST_pic);
+PRAC_REP_1ST_pic_texture_func = @() Screen('DrawTexture', window, PRAC_REP_1ST_pic_texture, [], dstRect);
+
+PRAC_REP_2ND_pic_texture = Screen('MakeTexture',window,PRAC_REP_2ND_pic);
+PRAC_REP_2ND_pic_texture_func = @() Screen('DrawTexture', window, PRAC_REP_2ND_pic_texture, [], dstRect);
+
+PRAC_REV_BTH_pic_texture = Screen('MakeTexture',window,PRAC_REV_BTH_pic);
+PRAC_REV_BTH_pic_texture_func = @() Screen('DrawTexture', window, PRAC_REV_BTH_pic_texture, [], dstRect);
+
+PRAC_DRP_BTH_pic_texture = Screen('MakeTexture',window,PRAC_DRP_BTH_pic);
+PRAC_DRP_BTH_pic_texture_func = @() Screen('DrawTexture', window, PRAC_DRP_BTH_pic_texture, [], dstRect);
+
+PRAC_mixed_pic_texture = Screen('MakeTexture',window,PRAC_mixed_pic);
+PRAC_mixed_pic_texture_func = @() Screen('DrawTexture', window, PRAC_mixed_pic_texture, [], dstRect);
+
+PRAC_END_pic_texture = Screen('MakeTexture',window,PRAC_END_pic);
+PRAC_END_pic_texture_func = @() Screen('DrawTexture', window, PRAC_END_pic_texture, [], dstRect);
 
 % Ready Loop
 while ~KbCheck
@@ -288,82 +330,36 @@ for iB=iBStart:nBlocks %nBlocks;
         if practice==1
             % full practice
             if ismember(iTrials,1:3:16)
+
+                switch iTrials
+                    case 1
+                        prac_texture_func=PRAC_REP_BTH_texture_func;
+                    case 4
+                        prac_texture_func=PRAC_REP_1ST_pic_texture_func;
+                    case 7
+                        prac_texture_func=PRAC_REP_2ND_pic_texture_func;
+                    case 10
+                        prac_texture_func=PRAC_REV_BTH_pic_texture_func;
+                    case 13
+                        prac_texture_func=PRAC_DRP_BTH_pic_texture_func;
+                    case 16
+                        prac_texture_func=PRAC_mixed_pic_texture_func;
+                end
+
                 while ~KbCheck
-                    switch iTrials
-                        case 1
-                            topText = 'You will hear two sounds (1 and 2). Keep them in mind. \n Then you will see a cue on screen: ';
-                            Prac_cue='1 2';
-                            bottomText = 'After a delay, you will see a green circle. \n Repeat the sounds as the green circle appears.';
-                        case 4
-                            topText = 'You will hear two sounds (1 and 2). Keep them in mind. \n Then you will see a cue on screen: ';
-                            Prac_cue='1';
-                            bottomText = 'After a delay, you will see a green circle. \n Repeat the first sound only as the green circle appears.';
-                        case 7
-                            topText = 'You will hear two sounds (1 and 2). Keep them in mind. \n Then you will see a cue on screen: ';
-                            Prac_cue='2';
-                            bottomText = 'After a delay, you will see a green circle. \n Repeat the second sound only as the green circle appears.';
-                        case 10
-                            topText = 'You will hear two sounds (1 and 2). Keep them in mind. \n Then you will see a cue on screen: ';
-                            Prac_cue='2 1';
-                            bottomText = 'After a delay, you will see a green circle. \n Reverse the order of sounds and say them \n as the green circle appears.';
-                        case 13
-                            topText = 'You will hear two sounds (1 and 2). Keep them in mind. \n Then you will see a cue on screen: ';
-                            Prac_cue='0';
-                            bottomText = 'Once you see the cue, do nothing.';
-                        case 16
-                            topText = '';
-                            Prac_cue=['1 2 : repeat both.\n\n' ...
-                                '1 : repeat the first.\n\n' ...
-                                '2 : repeat the second.\n\n' ...
-                                '2 1 : reverse and say.\n\n' ...
-                                '0 : do nothing.\n\n'] ;
-                            bottomText = '';
-                    end
-
-                    if ismember(iTrials,1:3:13)
-                        Screen('TextSize', window, 100);
-                    elseif iTrials==16
-                        Screen('TextSize', window, 50);
-                    end
-                    DrawFormattedText(window, Prac_cue, 'center', 'center', [1 1 1]);
-                    
-                    [normBoundsRect, ~] = Screen('TextBounds', window, Prac_cue);
-                    cueHeight = normBoundsRect(4) - normBoundsRect(2);
-                    
-                    Screen('TextSize', window, 50);
-                    DrawFormattedText(window, topText, 'center', yCenter - cueHeight / 2 - 120, [1 1 1]);
-                    
-                    DrawFormattedText(window, bottomText, 'center', yCenter + cueHeight / 2 + 120, [1 1 1]);
-                    
+                    prac_texture_func();
                     Screen('Flip', window);
-
-                    WaitSecs(0.001);
                 end
             end
-            Screen('TextSize', window, 100);
 
         elseif practice==2
             % full practice
             if ismember(iTrials,1)
                 while ~KbCheck
-                    Prac_cue=['1 2 : repeat both.\n\n' ...
-                        '1 : repeat the first.\n\n' ...
-                        '2 : repeat the second.\n\n' ...
-                        '2 1 : reverse and say.\n\n' ...
-                        '0 : do nothing.\n\n'] ;
-                    Screen('TextSize', window, 50);
-                    DrawFormattedText(window, Prac_cue, 'center', 'center', [1 1 1]);
-                    
-                    [normBoundsRect, ~] = Screen('TextBounds', window, Prac_cue);
-                    cueHeight = normBoundsRect(4) - normBoundsRect(2);
-                    
+                    PRAC_mixed_pic_texture_func();
                     Screen('Flip', window);
-
-                    WaitSecs(0.001);
                 end
             end
-            Screen('TextSize', window, 100);
-
         end
 
         %============================================
@@ -372,11 +368,11 @@ for iB=iBStart:nBlocks %nBlocks;
 
         
         % ! Currently I don't have the pase_script
-        if pause_script(window)
-            PsychPortAudio('close');
-            sca;
-             return;
-         end
+        % if pause_script(window)
+        %     PsychPortAudio('close');
+        %     sca;
+        %      return;
+        %  end
 
         switch retro_trials(iTrials)
             case 1 % REP_BTH
