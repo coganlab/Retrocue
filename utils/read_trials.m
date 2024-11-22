@@ -33,7 +33,7 @@ for i = 1:numRows
 
     trial_No(i) = data.Trial(i);
     block_No(i) = data.Suggested_Block(i);
-    Retro_Brightness(i) = 0.2+0.8*data.Cue_brightness(i); % Brightness ranging from 0.2 to 1
+    Retro_Brightness(i) = 0.5+0.8*data.Cue_brightness(i); % Brightness ranging from 0.5 to 1
 
     Syll1 = data.Syllable_1(i);
     switch Syll1{1}
