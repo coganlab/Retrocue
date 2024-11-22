@@ -1,4 +1,4 @@
-function Retro_Repeat_WithinBlock_util(subject,practice,startblock)
+function run_code=Retro_Repeat_WithinBlock_util(subject,practice,startblock)
 % Retro_Repeat_WithinBlock_util(subject,practice,startblock)
 % subject (string) = subject number, string
 % practice (integer) =  practice or full task. 1 = full practice, 2 = mixed session 
@@ -6,9 +6,9 @@ function Retro_Repeat_WithinBlock_util(subject,practice,startblock)
 % startblock = block to start from.  1 if new, >1 if needing to finish from
 
 sca;
-% [playbackdevID,capturedevID] = getDevices;
-playbackdevID=3;
-capturedevID=1;
+[playbackdevID,capturedevID] = getDevices;
+% playbackdevID=3;
+% capturedevID=1;
 
 %playbackdevID = 7; %3; % 4 for usb amp, 3 without
 %capturedevID = 6; %1; % 2 for usb amp, 1 without
@@ -342,6 +342,7 @@ for iB=iBStart:nBlocks %nBlocks;
                 while ~KbCheck
                     prac_texture_func();
                     Screen('Flip', window);
+                    WaitSecs(0.001);
                 end
             end
 
@@ -351,6 +352,7 @@ for iB=iBStart:nBlocks %nBlocks;
                 while ~KbCheck
                     PRAC_mixed_pic_texture_func();
                     Screen('Flip', window);
+                    WaitSecs(0.001);
                 end
             end
         end
@@ -361,11 +363,12 @@ for iB=iBStart:nBlocks %nBlocks;
 
         
         % ! Currently I don't have the pase_script
-        % if pause_script(window)
-        %     PsychPortAudio('close');
-        %     sca;
-        %      return;
-        %  end
+        if pause_script(window)
+            run_code=-1;
+            PsychPortAudio('close');
+            sca;
+             return;
+         end
 
         switch retro_trials(iTrials)
             case 1 % REP_BTH
@@ -642,13 +645,40 @@ for iB=iBStart:nBlocks %nBlocks;
     Screen('TextSize', window, 50);
 
     % % Break Screen
-    while ~KbCheck
-        % Set the text size
+    if practice==1 || practice==2
+        while true
+            [keyIsDown, ~, keyCode] = KbCheck;
 
-        DrawFormattedText(window, 'Take a short break and press any key to continue', 'center', 'center', [1 1 1]);
-        % Flip to the screen
-        Screen('Flip', window);
-        WaitSecs(0.001);
+            if keyIsDown
+                if keyCode(KbName('q'))
+                    run_code = -1; % QUIT
+                    break;
+                elseif keyCode(KbName('r'))
+                    run_code = 1; % Repeat the whole practice
+                    break;
+                elseif keyCode(KbName('p'))
+                    run_code = 2; % Repeat the mixed practice
+                    break;
+                elseif keyCode(KbName('space'))
+                    run_code = 0; % Enter the real exp
+                    break;
+                end
+            end
+            PRAC_END_pic_texture_func();
+            Screen('Flip', window);
+            WaitSecs(0.001);
+            
+        end
+    else
+        while ~KbCheck
+            DrawFormattedText(window, 'Take a short break and press any key to continue', 'center', 'center', [1 1 1]);
+            % Flip to the screen
+            Screen('Flip', window);
+            WaitSecs(0.001);
+        end
+        % Once a block for the true Experiment is completed, the run_code
+        % becomes -1 (QUIT mode).
+        run_code=-1;
     end
 
 end

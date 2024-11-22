@@ -14,16 +14,20 @@ if practice == 1
     if startblock~=1
         disp('In a mode containing Practice session, startblock can only be 1. Changed to 1 automatically');
     end
-    Retro_Repeat_WithinBlock_util(subject,1,1);
-    Retro_Repeat_WithinBlock_util(subject,0,1);
+    run_code=Retro_Repeat_WithinBlock_util(subject,1,1);
+    while run_code~=-1
+        Retro_Repeat_WithinBlock_util(subject,run_code,1);
+    end
 
 elseif practice == 2
     if startblock~=1
         disp('In a mode containing Practice session, startblock can only be 1. Changed to 1 automatically');
     end
-    Retro_Repeat_WithinBlock_util(subject,2,1);
-    Retro_Repeat_WithinBlock_util(subject,0,1);
-
+    run_code=Retro_Repeat_WithinBlock_util(subject,2,1);
+    while run_code~=-1
+        Retro_Repeat_WithinBlock_util(subject,run_code,1);
+    end
+    
 else
 
     Retro_Repeat_WithinBlock_util(subject,0,startblock);
