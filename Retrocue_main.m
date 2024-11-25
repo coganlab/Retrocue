@@ -16,7 +16,7 @@ if practice == 1
     end
     run_code=Retro_Repeat_WithinBlock_util(subject,1,1);
     while run_code~=-1
-        Retro_Repeat_WithinBlock_util(subject,run_code,1);
+       run_code=Retro_Repeat_WithinBlock_util(subject,run_code,1);
     end
 
 elseif practice == 2
@@ -25,7 +25,7 @@ elseif practice == 2
     end
     run_code=Retro_Repeat_WithinBlock_util(subject,2,1);
     while run_code~=-1
-        Retro_Repeat_WithinBlock_util(subject,run_code,1);
+      run_code=Retro_Repeat_WithinBlock_util(subject,run_code,1);
     end
     
 else
