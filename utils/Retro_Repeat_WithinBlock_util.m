@@ -92,13 +92,13 @@ nBlocks = max(block_No);
 speak_pic(:, :, 4) = speak_pic_alpha;
 
 % Load practice instruction
-[PRAC_REP_BTH_pic,~,~] = imread(fullfile("..","stim","instructions","PRAC_REP_BTH.PNG"));
-[PRAC_REP_1ST_pic,~,~] = imread(fullfile("..","stim","instructions","PRAC_REP_1ST.PNG"));
-[PRAC_REP_2ND_pic,~,~] = imread(fullfile("..","stim","instructions","PRAC_REP_2ND.PNG"));
-[PRAC_REV_BTH_pic,~,~] = imread(fullfile("..","stim","instructions","PRAC_REV_BTH.PNG"));
-[PRAC_DRP_BTH_pic,~,~] = imread(fullfile("..","stim","instructions","PRAC_DRP_BTH.PNG"));
-[PRAC_mixed_pic,~,~] = imread(fullfile("..","stim","instructions","PRAC_mixed.PNG"));
-[PRAC_END_pic,~,~] = imread(fullfile("..","stim","instructions","PRAC_END.PNG"));
+[PRAC_REP_BTH_pic,~,~] = imread(fullfile("..","stim","instructions","PRAC_REP_BTH.JPG"));
+[PRAC_REP_1ST_pic,~,~] = imread(fullfile("..","stim","instructions","PRAC_REP_1ST.JPG"));
+[PRAC_REP_2ND_pic,~,~] = imread(fullfile("..","stim","instructions","PRAC_REP_2ND.JPG"));
+[PRAC_REV_BTH_pic,~,~] = imread(fullfile("..","stim","instructions","PRAC_REV_BTH.JPG"));
+[PRAC_DRP_BTH_pic,~,~] = imread(fullfile("..","stim","instructions","PRAC_DRP_BTH.JPG"));
+[PRAC_mixed_pic,~,~] = imread(fullfile("..","stim","instructions","PRAC_mixed.JPG"));
+[PRAC_END_pic,~,~] = imread(fullfile("..","stim","instructions","PRAC_END.JPG"));
 
 %============================================
 %                screen setup
