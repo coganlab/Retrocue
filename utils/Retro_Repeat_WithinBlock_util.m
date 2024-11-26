@@ -345,6 +345,7 @@ for iB=iBStart:nBlocks %nBlocks;
                     Screen('Flip', window);
                     WaitSecs(0.001);
                 end
+                WaitSecs(0.5);
             end
 
         elseif practice==2
@@ -355,6 +356,7 @@ for iB=iBStart:nBlocks %nBlocks;
                     Screen('Flip', window);
                     WaitSecs(0.001);
                 end
+                WaitSecs(0.5);
             end
         end
 
