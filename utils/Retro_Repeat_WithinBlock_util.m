@@ -33,6 +33,7 @@ retro_Tags = {"REP_BTH","REV_BTH","REP_1ST","REP_2ND","DRP_BTH"};
 %============================================
 %        experiment parameter settings
 %============================================
+rng('shuffle');
 
 if practice==1
     fileSuff = '_Pract';
@@ -81,7 +82,7 @@ InitializePsychSound(1);
 if practice==1
     [~,block_No,Syll1_No,Syll2_No,Retro_No,Retro_Brightness]=read_trials('Prac',stim_Tags,retro_Tags);
 elseif practice==2
-    [~,block_No,Syll1_No,Syll2_No,Retro_No,Retro_Brightness]=read_trials('Prac_MIXED',stim_Tags,retro_Tags);
+    [~,block_No,Syll1_No,Syll2_No,Retro_No,Retro_Brightness]=read_trials(['Prac_MIXED_',num2str(randi([1, 3])),'_'],stim_Tags,retro_Tags);
 else
     [~,block_No,Syll1_No,Syll2_No,Retro_No,Retro_Brightness]=read_trials(subject,stim_Tags,retro_Tags);
 end
