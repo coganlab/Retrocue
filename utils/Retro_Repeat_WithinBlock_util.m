@@ -625,7 +625,7 @@ for iB=iBStart:nBlocks %nBlocks;
         end
 
                 
-        save([subjectDir '/' subject '_Block_' num2str(iBStart) fileSuff '_TrialData.mat'],'trialInfo')
+        save([subjectDir '/' subject '_Block_' num2str(iB) fileSuff '_TrialData.mat'],'trialInfo')
 
         trialCount=trialCount+1;
 
