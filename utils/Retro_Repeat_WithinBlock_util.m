@@ -69,7 +69,7 @@ filename_full = fullfile(subjectDir, [subject fileSuff]);
 
 % initialize BIDS_output
 
-fileID = fopen([filename_full '.csv'], 'w');
+fileID = fopen([filename_full '_Block_' num2str(iBStart) '.csv'], 'w');
 fprintf(fileID, 'onset,duration,trial_type,trial_num,block_num,cue_brightness\n');
 
 % Initialize Sounddriver
