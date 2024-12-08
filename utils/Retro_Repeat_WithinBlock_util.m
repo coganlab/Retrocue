@@ -92,7 +92,7 @@ nBlocks = max(block_No);
 [speak_pic,~,speak_pic_alpha] = imread(fullfile("..","stim","circle_green.png"));
 speak_pic(:, :, 4) = speak_pic_alpha;
 
-% Load practice instruction
+% Load instruction
 [PRAC_REP_BTH_pic,~,~] = imread(fullfile("..","stim","instructions","PRAC_REP_BTH.JPG"));
 [PRAC_REP_1ST_pic,~,~] = imread(fullfile("..","stim","instructions","PRAC_REP_1ST.JPG"));
 [PRAC_REP_2ND_pic,~,~] = imread(fullfile("..","stim","instructions","PRAC_REP_2ND.JPG"));
@@ -100,6 +100,13 @@ speak_pic(:, :, 4) = speak_pic_alpha;
 [PRAC_DRP_BTH_pic,~,~] = imread(fullfile("..","stim","instructions","PRAC_DRP_BTH.JPG"));
 [PRAC_mixed_pic,~,~] = imread(fullfile("..","stim","instructions","PRAC_mixed.JPG"));
 [PRAC_END_pic,~,~] = imread(fullfile("..","stim","instructions","PRAC_END.JPG"));
+
+[REP_BTH_pic,~,~] = imread(fullfile("..","stim","instructions","REP_BTH.JPG"));
+[REP_1ST_pic,~,~] = imread(fullfile("..","stim","instructions","REP_1ST.JPG"));
+[REP_2ND_pic,~,~] = imread(fullfile("..","stim","instructions","REP_2ND.JPG"));
+[REV_BTH_pic,~,~] = imread(fullfile("..","stim","instructions","REV_BTH.JPG"));
+[DRP_BTH_pic,~,~] = imread(fullfile("..","stim","instructions","DRP_BTH.JPG"));
+
 
 %============================================
 %                screen setup
@@ -146,7 +153,8 @@ dstRect = CenterRectOnPointd([0, 0, imageWidth * scaleFactor, imageHeight * scal
 texture = Screen('MakeTexture',window,speak_pic);
 texture_func = @() Screen('DrawTexture', window, texture, [], dstRect);
 
-% Instructions for Practice
+% Instructions for Practice and cues
+% for practice
 [imageHeight, imageWidth, ~] = size(PRAC_REP_BTH_pic);
 scaleFactor = 1;
 dstRect = CenterRectOnPointd([0, 0, imageWidth * scaleFactor, imageHeight * scaleFactor], screenXpixels / 2, screenYpixels / 2);
@@ -171,6 +179,23 @@ PRAC_mixed_pic_texture_func = @() Screen('DrawTexture', window, PRAC_mixed_pic_t
 
 PRAC_END_pic_texture = Screen('MakeTexture',window,PRAC_END_pic);
 PRAC_END_pic_texture_func = @() Screen('DrawTexture', window, PRAC_END_pic_texture, [], dstRect);
+
+% for cue
+REP_BTH_texture = Screen('MakeTexture',window,REP_BTH_pic);
+REP_BTH_texture_func = @() Screen('DrawTexture', window, REP_BTH_texture, [], dstRect);
+
+REP_1ST_pic_texture = Screen('MakeTexture',window,REP_1ST_pic);
+REP_1ST_pic_texture_func = @() Screen('DrawTexture', window, REP_1ST_pic_texture, [], dstRect);
+
+REP_2ND_pic_texture = Screen('MakeTexture',window,REP_2ND_pic);
+REP_2ND_pic_texture_func = @() Screen('DrawTexture', window, REP_2ND_pic_texture, [], dstRect);
+
+REV_BTH_pic_texture = Screen('MakeTexture',window,REV_BTH_pic);
+REV_BTH_pic_texture_func = @() Screen('DrawTexture', window, REV_BTH_pic_texture, [], dstRect);
+
+DRP_BTH_pic_texture = Screen('MakeTexture',window,DRP_BTH_pic);
+DRP_BTH_pic_texture_func = @() Screen('DrawTexture', window, DRP_BTH_pic_texture, [], dstRect);
+
 
 % Ready Loop
 while ~KbCheck
@@ -521,14 +546,26 @@ for iB=iBStart:nBlocks %nBlocks;
         % Draw Retrocue text
 
         retroB=retro_brightness_trials(iTrials);
+
+        if strcmp(cue,'1 2')
+            cue_texture_func=REP_BTH_texture_func;
+        elseif strcmp(cue,'1')
+            cue_texture_func=REP_1ST_pic_texture_func;
+        elseif strcmp(cue,'2')
+            cue_texture_func=REP_2ND_pic_texture_func;
+        elseif strcmp(cue,'2 1')
+            cue_texture_func=REV_BTH_pic_texture_func;
+        elseif strcmp(cue,'0')
+            cue_texture_func=DRP_BTH_pic_texture_func;
+        end
+
         for i = 1:cueTimeBaseFrames
             % Draw oval for 10 frames (duration of binary code with start/stop bit)
             if i<=1
                 Screen('FillOval', window, circleColor1, centeredCircle, baseCircleDiam); % leave on!
             else
-            % if i<=0.625*cueTimeBaseFrames
                 % Draw text
-                DrawFormattedText(window, cue, 'center', 'center', [1 1 1]*retroB);
+                cue_texture_func();
             end
             % Flip to the screen
             flipTimes(1,i) = Screen('Flip', window);
