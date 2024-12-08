@@ -182,19 +182,19 @@ PRAC_END_pic_texture_func = @() Screen('DrawTexture', window, PRAC_END_pic_textu
 
 % for cue
 REP_BTH_texture = Screen('MakeTexture',window,REP_BTH_pic);
-REP_BTH_texture_func = @() Screen('DrawTexture', window, REP_BTH_texture, [], dstRect);
+REP_BTH_texture_func = @(brightness) Screen('DrawTexture', window, REP_BTH_texture, [], dstRect,[],[],brightness);
 
 REP_1ST_pic_texture = Screen('MakeTexture',window,REP_1ST_pic);
-REP_1ST_pic_texture_func = @() Screen('DrawTexture', window, REP_1ST_pic_texture, [], dstRect);
+REP_1ST_pic_texture_func = @(brightness) Screen('DrawTexture', window, REP_1ST_pic_texture, [], dstRect,[],[],brightness);
 
 REP_2ND_pic_texture = Screen('MakeTexture',window,REP_2ND_pic);
-REP_2ND_pic_texture_func = @() Screen('DrawTexture', window, REP_2ND_pic_texture, [], dstRect);
+REP_2ND_pic_texture_func = @(brightness) Screen('DrawTexture', window, REP_2ND_pic_texture, [], dstRect,[],[],brightness);
 
 REV_BTH_pic_texture = Screen('MakeTexture',window,REV_BTH_pic);
-REV_BTH_pic_texture_func = @() Screen('DrawTexture', window, REV_BTH_pic_texture, [], dstRect);
+REV_BTH_pic_texture_func = @(brightness) Screen('DrawTexture', window, REV_BTH_pic_texture, [], dstRect,[],[],brightness);
 
 DRP_BTH_pic_texture = Screen('MakeTexture',window,DRP_BTH_pic);
-DRP_BTH_pic_texture_func = @() Screen('DrawTexture', window, DRP_BTH_pic_texture, [], dstRect);
+DRP_BTH_pic_texture_func = @(brightness) Screen('DrawTexture', window, DRP_BTH_pic_texture, [], dstRect,[],[],brightness);
 
 
 % Ready Loop
@@ -565,7 +565,7 @@ for iB=iBStart:nBlocks %nBlocks;
                 Screen('FillOval', window, circleColor1, centeredCircle, baseCircleDiam); % leave on!
             else
                 % Draw text
-                cue_texture_func();
+                cue_texture_func(retroB);
             end
             % Flip to the screen
             flipTimes(1,i) = Screen('Flip', window);
