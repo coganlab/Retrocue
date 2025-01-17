@@ -1,5 +1,5 @@
 # Task scripts for Retrocue Experiment
-Developed by Baishen Liang (liangbs95@gmail.com), adopting the lexical delayed repeat tasks in Cogan Lab.  
+Developed by Baishen Liang (liangbs95@gmail.com;baishen.liang@duke.edu), adopting the lexical delayed repeat tasks in Cogan Lab.  
   
 To run this task script, use Matlab:  
 Retrocue_main(subject,practice,startblock)  
