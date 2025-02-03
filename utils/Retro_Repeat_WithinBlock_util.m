@@ -431,8 +431,11 @@ for iB=iBStart:nBlocks %nBlocks;
 
         cueTimeBaseFrames = round((cueTimeBaseSeconds+(cueTimeJitterSeconds*rand(1,1))) / ifi);
 
-        delTimeSeconds = delTimeBaseSeconds + delTimeJitterSeconds*rand(1,1);
-        delTimeFrames = round(delTimeSeconds / ifi );
+        delTimeSeconds1 = delTimeBaseSeconds + delTimeJitterSeconds*rand(1,1);
+        delTimeFrames1 = round(delTimeSeconds1 / ifi );
+        delTimeSeconds2 = delTimeBaseSeconds + delTimeJitterSeconds*rand(1,1);
+        delTimeFrames2 = round(delTimeSeconds2 / ifi );
+
         goTimeSeconds = goTimeBaseSeconds +goTimeJitterSeconds*rand(1,1);
         goTimeFrames = round(goTimeSeconds / ifi);
         respTimeFrames = round(respTimeSeconds / ifi);
@@ -534,7 +537,7 @@ for iB=iBStart:nBlocks %nBlocks;
 
 
         trialInfo{trialCount+1}.del1Start=GetSecs;
-        for i=1:delTimeFrames
+        for i=1:delTimeFrames1
             Screen('Flip', window);
         end
         trialInfo{trialCount+1}.del1End=GetSecs;
@@ -577,7 +580,7 @@ for iB=iBStart:nBlocks %nBlocks;
         %               Delay 2
         %============================================
 
-        for i=1:delTimeFrames
+        for i=1:delTimeFrames2
             Screen('Flip', window);
         end
 
